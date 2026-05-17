@@ -1,234 +1,169 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useRef } from 'react';
+import { PROJECTS, INITIAL_FILES, TAG_LABELS, TAG_COLORS, TYPE_COLORS, type ProjectId, type FileTag, type FileType, type PortalFile } from '@/lib/data';
 
-const portals = [
-  {
-    id: 'dental',
-    name: 'Tascal Dental',
-    icon: '🦷',
-    status: 'active',
-    color: '#0891b2',
-    portals: [
-      { name: '歯科医院 Portal', desc: '医院向けダッシュボード', url: 'https://tascal-dental.vercel.app', icon: '🏥' },
-      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://tascal-dental.vercel.app/super-admin', icon: '🔐' },
-      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://tascal-dental.vercel.app/partner', icon: '🤝' },
-    ],
-  },
-  {
-    id: 'beauty',
-    name: 'Love Beauty',
-    icon: '💄',
-    status: 'active',
-    color: '#e91e8c',
-    portals: [
-      { name: 'Beauty Portal', desc: 'サロン向けダッシュボード', url: 'https://lovebeauty.salon', icon: '✨' },
-      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://lovebeauty.salon/super-admin', icon: '🔐' },
-      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://lovebeauty.salon/partner', icon: '🤝' },
-    ],
-  },
-  {
-    id: 'touch',
-    name: 'Tascal Touch',
-    icon: '👆',
-    status: 'coming',
-    color: '#7c3aed',
-    portals: [
-      { name: 'Touch Portal', desc: '準備中', url: '', icon: '🏢' },
-      { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
-      { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
-    ],
-  },
-  {
-    id: 'wellness',
-    name: 'Tascal Wellness',
-    icon: '🌿',
-    status: 'coming',
-    color: '#10b981',
-    portals: [
-      { name: 'Wellness Portal', desc: '準備中', url: '', icon: '🏢' },
-      { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
-      { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
-    ],
-  },
-  {
-    id: 'clinic',
-    name: 'Tascal Clinic',
-    icon: '🏥',
-    status: 'coming',
-    color: '#f59e0b',
-    portals: [
-      { name: 'Clinic Portal', desc: '準備中', url: '', icon: '🏢' },
-      { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
-      { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
-    ],
-  },
-];
-
-const C = {
-  bg: '#0D1117',
-  surface: '#161B22',
-  border: '#30363D',
-  text: '#F0F6FC',
-  muted: '#8B949E',
-};
-
-export default function Home() {
-  const [pw, setPw] = useState('');
-  const [authed, setAuthed] = useState(false);
-  const [pwError, setPwError] = useState(false);
-
-  function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    if (pw === 'Norikosan1947##') {
-      setAuthed(true);
-    } else {
-      setPwError(true);
-      setTimeout(() => setPwError(false), 2000);
-    }
-  }
-
-  if (!authed) return (
-    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Noto Sans JP', sans-serif" }}>
-      <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 16, padding: '3rem', width: 380, boxShadow: '0 25px 60px rgba(0,0,0,0.5)' }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{ fontSize: 48, marginBottom: 12 }}>🌐</div>
-          <div style={{ fontSize: 11, color: C.muted, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 6 }}>Globish International</div>
-          <div style={{ fontSize: 22, fontWeight: 700, color: C.text }}>Portal Hub</div>
-          <div style={{ fontSize: 12, color: C.muted, marginTop: 4 }}>坂田さん専用</div>
-        </div>
-        <form onSubmit={handleLogin}>
-          <input
-            type="password"
-            value={pw}
-            onChange={e => setPw(e.target.value)}
-            placeholder="パスワードを入力"
-            autoFocus
-            style={{
-              width: '100%', padding: '12px 16px', background: C.bg,
-              border: `1px solid ${pwError ? '#ef4444' : C.border}`,
-              borderRadius: 8, color: C.text, fontSize: 15, outline: 'none',
-              marginBottom: '1rem', boxSizing: 'border-box', fontFamily: 'inherit',
-            }}
-          />
-          {pwError && <p style={{ color: '#ef4444', fontSize: 12, marginBottom: '0.75rem' }}>パスワードが違います</p>}
-          <button type="submit" style={{
-            width: '100%', padding: '13px',
-            background: 'linear-gradient(135deg, #0891b2, #0e7490)',
-            border: 'none', borderRadius: 8, color: '#fff',
-            fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
-          }}>
-            ログイン →
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-
+export default function PortalPage() {
+  const [files, setFiles] = useState<PortalFile[]>(INITIAL_FILES);
+  const [selectedProject, setSelectedProject] = useState<ProjectId | null>(null);
+  const [search, setSearch] = useState('');
+  const [tagFilter, setTagFilter] = useState<FileTag | ''>('');
+  const [sortBy, setSortBy] = useState<'date' | 'name' | 'type'>('date');
+  const [uploadAnim, setUploadAnim] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const today = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+  const filteredFiles = useMemo(() => {
+    return files.filter((f) => {
+      const matchProject = !selectedProject || f.project === selectedProject;
+      const matchTag = !tagFilter || f.tag === tagFilter;
+      const matchSearch = !search || f.name.toLowerCase().includes(search.toLowerCase());
+      return matchProject && matchTag && matchSearch;
+    }).sort((a, b) => {
+      if (sortBy === 'date') return b.date.localeCompare(a.date);
+      if (sortBy === 'name') return a.name.localeCompare(b.name, 'ja');
+      return a.type.localeCompare(b.type);
+    });
+  }, [files, selectedProject, tagFilter, search, sortBy]);
+  const projectFileCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    files.forEach((f) => { if (f.project) counts[f.project] = (counts[f.project] || 0) + 1; });
+    return counts;
+  }, [files]);
+  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const uploaded = e.target.files;
+    if (!uploaded) return;
+    const newFiles: PortalFile[] = Array.from(uploaded).map((file, i) => {
+      const ext = file.name.split('.').pop()?.toUpperCase() as FileType || 'OTHER';
+      const validTypes: FileType[] = ['DOCX', 'PDF', 'XLSX', 'PNG'];
+      return { id: Date.now() + i, name: file.name, project: selectedProject, tag: 'general', date: new Date().toISOString().slice(0, 10), type: validTypes.includes(ext) ? ext : 'OTHER', size: file.size > 1024 * 1024 ? `${(file.size / 1024 / 1024).toFixed(1)} MB` : `${Math.round(file.size / 1024)} KB` };
+    });
+    setUploadAnim(true);
+    setTimeout(() => setUploadAnim(false), 600);
+    setFiles((prev) => [...newFiles, ...prev]);
+    e.target.value = '';
+  };
+  const deleteFile = (id: number) => setFiles((prev) => prev.filter((f) => f.id !== id));
+  const selectedProj = PROJECTS.find((p) => p.id === selectedProject);
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: "'Noto Sans JP', sans-serif", color: C.text }}>
-
-      {/* Header */}
-      <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: '0 2rem', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ fontSize: 24 }}>🌐</span>
+    <div style={{ minHeight: '100vh', background: '#F7F6F2', fontFamily: "'DM Sans','Noto Sans JP',sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&family=Noto+Sans+JP:wght@300;400;500&display=swap');*{box-sizing:border-box;margin:0;padding:0}body{background:#F7F6F2}.file-row{transition:background 0.12s}.file-row:hover{background:#EEEDFE22}.file-row:hover .file-actions{opacity:1!important}.proj-card{transition:all 0.15s;cursor:pointer}.proj-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,0.07)}input:focus,select:focus,button:focus{outline:none}`}</style>
+      <aside style={{ position:'fixed',left:0,top:0,bottom:0,width:220,background:'#1B1B18',padding:'28px 0',display:'flex',flexDirection:'column',zIndex:100 }}>
+        <div style={{ padding:'0 24px 28px',borderBottom:'0.5px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ fontSize:11,letterSpacing:3,color:'#888780',marginBottom:6,textTransform:'uppercase' }}>Tascal Nippon</div>
+          <div style={{ fontFamily:"'DM Serif Display',serif",fontSize:20,color:'#F7F6F2',lineHeight:1.2 }}>Project<br/>Portal</div>
+        </div>
+        <nav style={{ padding:'20px 12px',flex:1,overflowY:'auto' }}>
+          <div style={{ fontSize:10,letterSpacing:2,color:'#5F5E5A',padding:'0 12px',marginBottom:10,textTransform:'uppercase' }}>Projects</div>
+          <button onClick={() => setSelectedProject(null)} style={{ width:'100%',display:'flex',alignItems:'center',gap:10,padding:'9px 12px',borderRadius:8,border:'none',cursor:'pointer',background:!selectedProject?'rgba(255,255,255,0.08)':'transparent',color:!selectedProject?'#F7F6F2':'#888780',fontSize:13,fontFamily:'inherit',marginBottom:2,textAlign:'left' }}>
+            <span style={{ fontSize:16 }}>🗂️</span><span style={{ flex:1 }}>全プロジェクト</span>
+            <span style={{ fontSize:11,background:'rgba(255,255,255,0.1)',borderRadius:4,padding:'1px 6px' }}>{files.length}</span>
+          </button>
+          {PROJECTS.map((p) => (
+            <button key={p.id} onClick={() => setSelectedProject(selectedProject===p.id?null:p.id)} style={{ width:'100%',display:'flex',alignItems:'center',gap:10,padding:'9px 12px',borderRadius:8,border:'none',cursor:'pointer',background:selectedProject===p.id?'rgba(255,255,255,0.08)':'transparent',color:selectedProject===p.id?'#F7F6F2':'#888780',fontSize:13,fontFamily:'inherit',marginBottom:2,textAlign:'left' }}>
+              <span style={{ fontSize:16 }}>{p.icon}</span><span style={{ flex:1 }}>{p.nameEn}</span>
+              <span style={{ fontSize:10,borderRadius:10,padding:'1px 6px',background:p.done?'#0F6E5620':'#BA751720',color:p.done?'#1D9E75':'#BA7517' }}>{p.status}</span>
+            </button>
+          ))}
+          <div style={{ fontSize:10,letterSpacing:2,color:'#5F5E5A',padding:'16px 12px 10px',textTransform:'uppercase' }}>Filter</div>
+          {(['','security','marketing','legal','general'] as const).map((tag) => (
+            <button key={tag} onClick={() => setTagFilter(tag as FileTag|'')} style={{ width:'100%',display:'flex',alignItems:'center',gap:10,padding:'8px 12px',borderRadius:8,border:'none',cursor:'pointer',background:tagFilter===tag?'rgba(255,255,255,0.08)':'transparent',color:tagFilter===tag?'#F7F6F2':'#888780',fontSize:12,fontFamily:'inherit',marginBottom:2,textAlign:'left' }}>
+              <span style={{ fontSize:14 }}>{tag===''?'📋':tag==='security'?'🔒':tag==='marketing'?'📢':tag==='legal'?'⚖️':'📁'}</span>
+              {tag===''?'全カテゴリ':TAG_LABELS[tag as FileTag]}
+            </button>
+          ))}
+        </nav>
+        <div style={{ padding:'16px 24px',borderTop:'0.5px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ fontSize:11,color:'#5F5E5A' }}>{today}</div>
+          <div style={{ fontSize:10,color:'#444441',marginTop:4 }}>坂田さん専用ポータル</div>
+        </div>
+      </aside>
+      <main style={{ marginLeft:220,padding:'36px 40px',minHeight:'100vh' }}>
+        <div style={{ display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:32 }}>
           <div>
-            <div style={{ fontSize: 16, fontWeight: 700 }}>Globish Portal Hub</div>
-            <div style={{ fontSize: 10, color: '#0891b2', letterSpacing: '0.15em', textTransform: 'uppercase' }}>全サービス一元管理</div>
+            <h1 style={{ fontFamily:"'DM Serif Display',serif",fontSize:32,color:'#1B1B18',fontWeight:400,lineHeight:1.2 }}>{selectedProj?selectedProj.name:'Tascal Nippon'}</h1>
+            <p style={{ fontSize:14,color:'#888780',marginTop:4 }}>{selectedProj?selectedProj.description:'5プロジェクト一元管理ポータル'}</p>
+          </div>
+          <div>
+            <input ref={fileInputRef} type="file" multiple accept=".pdf,.docx,.xlsx,.png" onChange={handleUpload} style={{ display:'none' }}/>
+            <button onClick={() => fileInputRef.current?.click()} style={{ display:'flex',alignItems:'center',gap:8,padding:'10px 20px',background:'#1B1B18',color:'#F7F6F2',border:'none',borderRadius:10,cursor:'pointer',fontSize:13,fontFamily:'inherit',fontWeight:500 }}>↑ アップロード</button>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ fontSize: 12, color: C.muted }}>坂田昌鴻</div>
-          <button onClick={() => setAuthed(false)} style={{ padding: '6px 14px', background: '#ef444415', border: '1px solid #ef444430', borderRadius: 8, color: '#ef4444', fontSize: 12, cursor: 'pointer' }}>
-            ログアウト
-          </button>
-        </div>
-      </div>
-
-      {/* Main */}
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '2.5rem 2rem' }}>
-
-        <div style={{ marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>Portal 一覧</h1>
-          <p style={{ color: C.muted, fontSize: 13 }}>クリックするだけで各Portalに直接アクセスできます</p>
-        </div>
-
-        {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
-          {[
-            { label: '総サービス数', value: '5', color: '#0891b2' },
-            { label: '稼働中', value: '2', color: '#10b981' },
-            { label: '総Portal数', value: '15', color: '#7c3aed' },
-          ].map((s, i) => (
-            <div key={i} style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 12, padding: '1.25rem', borderTop: `3px solid ${s.color}` }}>
-              <div style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>{s.label}</div>
-              <div style={{ fontSize: 32, fontWeight: 800, color: s.color }}>{s.value}</div>
+        <div style={{ display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:32 }}>
+          {[{label:'プロジェクト',value:5,sub:'総数'},{label:'ファイル',value:files.length,sub:'全件'},{label:'完成済み',value:2,sub:'Dental & Beauty',color:'#0F6E56'},{label:'展開中',value:3,sub:'Touch / Wellness / Clinic',color:'#BA7517'}].map((s) => (
+            <div key={s.label} style={{ background:'#fff',borderRadius:12,padding:'16px 20px',border:'0.5px solid #E8E6E0' }}>
+              <div style={{ fontSize:28,fontWeight:600,color:s.color||'#1B1B18',fontFamily:"'DM Serif Display',serif" }}>{s.value}</div>
+              <div style={{ fontSize:13,color:'#1B1B18',fontWeight:500,marginTop:2 }}>{s.label}</div>
+              <div style={{ fontSize:11,color:'#888780',marginTop:2 }}>{s.sub}</div>
             </div>
           ))}
         </div>
-
-        {/* Portal Cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {portals.map(service => (
-            <div key={service.id} style={{
-              background: C.surface, border: `1px solid ${C.border}`,
-              borderRadius: 14, overflow: 'hidden',
-              opacity: service.status === 'coming' ? 0.6 : 1,
-            }}>
-              {/* Service Header */}
-              <div style={{
-                padding: '14px 20px', borderBottom: `1px solid ${C.border}`,
-                display: 'flex', alignItems: 'center', gap: 12,
-                background: `${service.color}10`,
-              }}>
-                <span style={{ fontSize: 22 }}>{service.icon}</span>
-                <div style={{ fontSize: 16, fontWeight: 700 }}>{service.name}</div>
-                <div style={{
-                  marginLeft: 'auto', fontSize: 11, padding: '3px 10px', borderRadius: 12, fontWeight: 700,
-                  background: service.status === 'active' ? '#10b98120' : '#8B949E20',
-                  color: service.status === 'active' ? '#10b981' : C.muted,
-                  border: `1px solid ${service.status === 'active' ? '#10b98140' : '#8B949E40'}`,
-                }}>
-                  {service.status === 'active' ? '✅ 稼働中' : '🔧 開発中'}
+        {!selectedProject && (
+          <div style={{ marginBottom:32 }}>
+            <div style={{ fontSize:12,letterSpacing:2,color:'#888780',textTransform:'uppercase',marginBottom:14 }}>Projects</div>
+            <div style={{ display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:10 }}>
+              {PROJECTS.map((p) => (
+                <div key={p.id} className="proj-card" onClick={() => setSelectedProject(p.id)} style={{ background:'#fff',borderRadius:12,padding:'16px',border:'0.5px solid #E8E6E0' }}>
+                  <div style={{ fontSize:28,marginBottom:10 }}>{p.icon}</div>
+                  <div style={{ fontSize:13,fontWeight:500,color:'#1B1B18',marginBottom:4 }}>{p.name}</div>
+                  <div style={{ display:'inline-block',fontSize:10,padding:'2px 8px',borderRadius:20,background:p.done?'#E1F5EE':'#FAEEDA',color:p.done?'#0F6E56':'#854F0B',marginBottom:10 }}>{p.status}</div>
+                  <div style={{ fontSize:12,color:'#888780' }}>{projectFileCounts[p.id]||0} ファイル</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        <div style={{ display:'flex',gap:10,marginBottom:16,alignItems:'center' }}>
+          <div style={{ flex:1,display:'flex',alignItems:'center',gap:10,background:'#fff',border:'0.5px solid #E8E6E0',borderRadius:10,padding:'10px 16px' }}>
+            <span style={{ fontSize:16,color:'#888780' }}>🔍</span>
+            <input type="text" placeholder="ファイルを検索..." value={search} onChange={(e) => setSearch(e.target.value)} style={{ border:'none',background:'transparent',fontSize:14,color:'#1B1B18',width:'100%',fontFamily:'inherit' }}/>
+            {search && <button onClick={() => setSearch('')} style={{ border:'none',background:'none',cursor:'pointer',color:'#888780',fontSize:18 }}>×</button>}
+          </div>
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} style={{ padding:'10px 14px',borderRadius:10,border:'0.5px solid #E8E6E0',background:'#fff',fontSize:13,color:'#1B1B18',fontFamily:'inherit',cursor:'pointer' }}>
+            <option value="date">日付順</option><option value="name">名前順</option><option value="type">種類順</option>
+          </select>
+        </div>
+        <div className={uploadAnim?'upload-pulse':''} style={{ background:'#fff',borderRadius:14,border:'0.5px solid #E8E6E0',overflow:'hidden' }}>
+          <div style={{ display:'grid',gridTemplateColumns:'40px 1fr 120px 90px 80px 100px',padding:'10px 20px',borderBottom:'0.5px solid #E8E6E0',background:'#F7F6F2' }}>
+            {['','ファイル名','プロジェクト','カテゴリ','形式','日付'].map((h) => (
+              <div key={h} style={{ fontSize:11,color:'#888780',letterSpacing:1,textTransform:'uppercase',fontWeight:500 }}>{h}</div>
+            ))}
+          </div>
+          {filteredFiles.length===0 ? (
+            <div style={{ textAlign:'center',padding:'3rem',color:'#888780' }}><div style={{ fontSize:40,marginBottom:12 }}>📭</div><div style={{ fontSize:14 }}>ファイルが見つかりません</div></div>
+          ) : filteredFiles.map((file,i) => {
+            const proj = PROJECTS.find((p) => p.id===file.project);
+            const tagStyle = TAG_COLORS[file.tag];
+            const typeStyle = TYPE_COLORS[file.type];
+            return (
+              <div key={file.id} className="file-row" style={{ display:'grid',gridTemplateColumns:'40px 1fr 120px 90px 80px 100px',padding:'11px 20px',borderBottom:i<filteredFiles.length-1?'0.5px solid #E8E6E0':'none',alignItems:'center' }}>
+                <div style={{ width:28,height:28,borderRadius:6,display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,background:typeStyle.bg }}>{file.type==='DOCX'?'📄':file.type==='PDF'?'📕':file.type==='XLSX'?'📊':'📎'}</div>
+                <div style={{ paddingRight:12,minWidth:0 }}>
+                  <div style={{ fontSize:13,color:'#1B1B18',fontWeight:500,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap' }}>{file.name}</div>
+                  <div style={{ fontSize:11,color:'#888780',marginTop:1 }}>{file.size}</div>
+                </div>
+                <div>{proj?<span style={{ fontSize:12,display:'flex',alignItems:'center',gap:4 }}><span>{proj.icon}</span><span style={{ color:proj.color,fontWeight:500 }}>{proj.nameEn}</span></span>:<span style={{ fontSize:11,color:'#B4B2A9' }}>共通</span>}</div>
+                <div><span style={{ fontSize:11,padding:'3px 8px',borderRadius:20,background:tagStyle.bg,color:tagStyle.text,fontWeight:500 }}>{TAG_LABELS[file.tag]}</span></div>
+                <div><span style={{ fontSize:11,padding:'3px 8px',borderRadius:6,background:typeStyle.bg,color:typeStyle.text,fontWeight:600 }}>{file.type}</span></div>
+                <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between' }}>
+                  <span style={{ fontSize:11,color:'#888780' }}>{file.date.slice(5).replace('-','/')}</span>
+                  <div className="file-actions" style={{ display:'flex',gap:4,opacity:0,transition:'opacity 0.12s' }}>
+                    <button onClick={() => deleteFile(file.id)} style={{ background:'none',border:'0.5px solid #E8E6E0',borderRadius:5,padding:'3px 7px',cursor:'pointer',fontSize:12,color:'#A32D2D' }}>🗑</button>
+                  </div>
                 </div>
               </div>
-
-              {/* Portal Links */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
-                {service.portals.map((portal, i) => (
-                  <div key={i} style={{ borderRight: i < 2 ? `1px solid ${C.border}` : 'none' }}>
-                    {service.status === 'active' && portal.url ? (
-                      <a href={portal.url} target="_blank" rel="noopener noreferrer" style={{
-                        display: 'flex', flexDirection: 'column', gap: 6, padding: '18px 20px',
-                        textDecoration: 'none', transition: 'background 0.15s',
-                      }}
-                        onMouseEnter={e => (e.currentTarget.style.background = `${service.color}15`)}
-                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                      >
-                        <span style={{ fontSize: 22 }}>{portal.icon}</span>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{portal.name}</span>
-                        <span style={{ fontSize: 11, color: C.muted }}>{portal.desc}</span>
-                        <span style={{ fontSize: 10, color: service.color, marginTop: 4 }}>→ 開く</span>
-                      </a>
-                    ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '18px 20px' }}>
-                        <span style={{ fontSize: 22 }}>{portal.icon}</span>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: C.muted }}>{portal.name}</span>
-                        <span style={{ fontSize: 11, color: C.muted }}>{portal.desc}</span>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
-
-        {/* Footer */}
-        <div style={{ textAlign: 'center', marginTop: '3rem', padding: '1.5rem 0', borderTop: `1px solid ${C.border}`, color: C.muted, fontSize: 12 }}>
-          Globish International Co., Ltd. — CEO: Masahiro Sakata — Kuala Lumpur, Malaysia
+        <div onClick={() => fileInputRef.current?.click()} style={{ marginTop:16,border:'1.5px dashed #D3D1C7',borderRadius:12,padding:'20px',textAlign:'center',cursor:'pointer',color:'#888780' }} onMouseEnter={(e) => (e.currentTarget.style.background='#F1EFE8')} onMouseLeave={(e) => (e.currentTarget.style.background='transparent')}>
+          <div style={{ fontSize:24,marginBottom:6 }}>☁️</div>
+          <div style={{ fontSize:13 }}>ファイルをドラッグ＆ドロップ、またはクリックして選択</div>
+          <div style={{ fontSize:11,marginTop:4,color:'#B4B2A9' }}>PDF, DOCX, XLSX, PNG 対応</div>
         </div>
-      </div>
+        <div style={{ marginTop:32,paddingTop:16,borderTop:'0.5px solid #E8E6E0',display:'flex',justifyContent:'space-between',alignItems:'center' }}>
+          <div style={{ fontSize:11,color:'#B4B2A9' }}>Tascal Nippon Portal — 坂田さん専用</div>
+          <div style={{ fontSize:11,color:'#B4B2A9' }}>{filteredFiles.length} / {files.length} ファイル表示中</div>
+        </div>
+      </main>
     </div>
   );
 }
