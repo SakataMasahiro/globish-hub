@@ -29,6 +29,7 @@ export interface PortalFile {
   date: string;
   type: FileType;
   size: string;
+  objectUrl?: string;
 }
 
 export const PROJECTS: Project[] = [
