@@ -6,6 +6,7 @@ import { PROJECTS, INITIAL_FILES, TAG_LABELS, TAG_COLORS, TYPE_COLORS, type Proj
 export default function PortalPage() {
   const [files, setFiles] = useState<PortalFile[]>(INITIAL_FILES);
   const [selectedProject, setSelectedProject] = useState<ProjectId | null>(null);
+  const [portalModal, setPortalModal] = useState<ProjectId | null>(null);
   const [search, setSearch] = useState('');
   const [tagFilter, setTagFilter] = useState<FileTag | ''>('');
   const [sortBy, setSortBy] = useState<'date' | 'name' | 'type'>('date');
@@ -44,9 +45,39 @@ export default function PortalPage() {
   };
   const deleteFile = (id: number) => setFiles((prev) => prev.filter((f) => f.id !== id));
   const selectedProj = PROJECTS.find((p) => p.id === selectedProject);
+  const modalProj = PROJECTS.find((p) => p.id === portalModal);
   return (
     <div style={{ minHeight: '100vh', background: '#F7F6F2', fontFamily: "'DM Sans','Noto Sans JP',sans-serif" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&family=Noto+Sans+JP:wght@300;400;500&display=swap');*{box-sizing:border-box;margin:0;padding:0}body{background:#F7F6F2}.file-row{transition:background 0.12s}.file-row:hover{background:#EEEDFE22}.file-row:hover .file-actions{opacity:1!important}.proj-card{transition:all 0.15s;cursor:pointer}.proj-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,0.07)}input:focus,select:focus,button:focus{outline:none}`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&family=Noto+Sans+JP:wght@300;400;500&display=swap');*{box-sizing:border-box;margin:0;padding:0}body{background:#F7F6F2}.file-row{transition:background 0.12s}.file-row:hover{background:#EEEDFE22}.file-row:hover .file-actions{opacity:1!important}.proj-card{transition:all 0.15s}.proj-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,0.07)}.portal-link{transition:background 0.12s;text-decoration:none;display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:10px;border:1px solid #E8E6E0}.portal-link:hover{background:#F7F6F2}input:focus,select:focus,button:focus{outline:none}`}</style>
+      {portalModal && modalProj && (
+        <div onClick={() => setPortalModal(null)} style={{ position:'fixed',inset:0,background:'rgba(0,0,0,0.55)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center' }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background:'#fff',borderRadius:18,padding:'28px',width:440,boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
+            <div style={{ display:'flex',alignItems:'center',gap:12,marginBottom:20,paddingBottom:16,borderBottom:'1px solid #E8E6E0' }}>
+              <span style={{ fontSize:32 }}>{modalProj.icon}</span>
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:18,fontWeight:600,color:'#1B1B18' }}>{modalProj.name}</div>
+                <div style={{ fontSize:12,color:'#888780',marginTop:2 }}>{modalProj.description}</div>
+              </div>
+              <button onClick={() => setPortalModal(null)} style={{ background:'none',border:'none',cursor:'pointer',fontSize:24,color:'#888780',lineHeight:1,padding:'4px' }}>×</button>
+            </div>
+            <div style={{ fontSize:11,letterSpacing:2,color:'#888780',textTransform:'uppercase',marginBottom:12 }}>Portal を選択</div>
+            <div style={{ display:'flex',flexDirection:'column',gap:8 }}>
+              {modalProj.portals.map((portal, i) => (
+                <a key={i} href={portal.url} target="_blank" rel="noopener noreferrer" className="portal-link">
+                  <span style={{ fontSize:26,minWidth:38,textAlign:'center' }}>{portal.icon}</span>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:14,fontWeight:600,color:'#1B1B18' }}>{portal.name}</div>
+                    <div style={{ fontSize:11,color:'#888780',marginTop:2 }}>{portal.desc}</div>
+                    <div style={{ fontSize:10,color:modalProj.color,marginTop:3,fontFamily:'monospace' }}>{portal.url}</div>
+                  </div>
+                  <span style={{ fontSize:16,color:modalProj.color,fontWeight:700,flexShrink:0 }}>→</span>
+                </a>
+              ))}
+            </div>
+            <button onClick={() => { setSelectedProject(modalProj.id); setPortalModal(null); }} style={{ width:'100%',marginTop:16,padding:'11px',background:'#F7F6F2',border:'0.5px solid #E8E6E0',borderRadius:10,cursor:'pointer',fontSize:13,color:'#1B1B18',fontFamily:'inherit',fontWeight:500 }}>📁 ファイルを見る</button>
+          </div>
+        </div>
+      )}
       <aside style={{ position:'fixed',left:0,top:0,bottom:0,width:220,background:'#1B1B18',padding:'28px 0',display:'flex',flexDirection:'column',zIndex:100 }}>
         <div style={{ padding:'0 24px 28px',borderBottom:'0.5px solid rgba(255,255,255,0.08)' }}>
           <div style={{ fontSize:11,letterSpacing:3,color:'#888780',marginBottom:6,textTransform:'uppercase' }}>Tascal Nippon</div>
@@ -102,11 +133,12 @@ export default function PortalPage() {
             <div style={{ fontSize:12,letterSpacing:2,color:'#888780',textTransform:'uppercase',marginBottom:14 }}>Projects</div>
             <div style={{ display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:10 }}>
               {PROJECTS.map((p) => (
-                <div key={p.id} className="proj-card" onClick={() => setSelectedProject(p.id)} style={{ background:'#fff',borderRadius:12,padding:'16px',border:'0.5px solid #E8E6E0' }}>
+                <div key={p.id} className="proj-card" onClick={() => p.done ? setPortalModal(p.id) : null} style={{ background:'#fff',borderRadius:12,padding:'16px',border:`0.5px solid ${p.done?p.color+'50':'#E8E6E0'}`,cursor:p.done?'pointer':'default' }}>
                   <div style={{ fontSize:28,marginBottom:10 }}>{p.icon}</div>
                   <div style={{ fontSize:13,fontWeight:500,color:'#1B1B18',marginBottom:4 }}>{p.name}</div>
                   <div style={{ display:'inline-block',fontSize:10,padding:'2px 8px',borderRadius:20,background:p.done?'#E1F5EE':'#FAEEDA',color:p.done?'#0F6E56':'#854F0B',marginBottom:10 }}>{p.status}</div>
-                  <div style={{ fontSize:12,color:'#888780' }}>{projectFileCounts[p.id]||0} ファイル</div>
+                  <div style={{ fontSize:12,color:'#888780',marginBottom:p.done?8:0 }}>{projectFileCounts[p.id]||0} ファイル</div>
+                  {p.done && <div style={{ fontSize:11,color:p.color,fontWeight:600 }}>🔗 Portal を開く →</div>}
                 </div>
               ))}
             </div>
@@ -122,7 +154,7 @@ export default function PortalPage() {
             <option value="date">日付順</option><option value="name">名前順</option><option value="type">種類順</option>
           </select>
         </div>
-        <div className={uploadAnim?'upload-pulse':''} style={{ background:'#fff',borderRadius:14,border:'0.5px solid #E8E6E0',overflow:'hidden' }}>
+        <div style={{ background:'#fff',borderRadius:14,border:'0.5px solid #E8E6E0',overflow:'hidden' }}>
           <div style={{ display:'grid',gridTemplateColumns:'40px 1fr 120px 90px 80px 100px',padding:'10px 20px',borderBottom:'0.5px solid #E8E6E0',background:'#F7F6F2' }}>
             {['','ファイル名','プロジェクト','カテゴリ','形式','日付'].map((h) => (
               <div key={h} style={{ fontSize:11,color:'#888780',letterSpacing:1,textTransform:'uppercase',fontWeight:500 }}>{h}</div>
