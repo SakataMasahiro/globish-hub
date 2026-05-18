@@ -54,6 +54,11 @@ export default function PortalPage() {
     e.target.value = '';
   };
 
+  const openFile = (file: PortalFile) => {
+    if (file.driveUrl) window.open(file.driveUrl, '_blank');
+    else if (file.objectUrl) window.open(file.objectUrl, '_blank');
+  };
+
   const deleteFile = (id: number) => setFiles((prev) => prev.filter((f) => f.id !== id));
   const selectedProj = PROJECTS.find((p) => p.id === selectedProject);
   const modalProj = PROJECTS.find((p) => p.id === portalModal);
@@ -62,7 +67,6 @@ export default function PortalPage() {
     <div style={{ minHeight: '100vh', background: '#F7F6F2', fontFamily: "'DM Sans','Noto Sans JP',sans-serif" }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&family=Noto+Sans+JP:wght@300;400;500&display=swap');*{box-sizing:border-box;margin:0;padding:0}body{background:#F7F6F2}.file-row{transition:background 0.12s;cursor:pointer}.file-row:hover{background:#F0EEF8}.file-row:hover .file-actions{opacity:1!important}.proj-card{transition:all 0.15s}.proj-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,0.07)}.portal-link{transition:background 0.12s;text-decoration:none;display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:10px;border:1px solid #E8E6E0}.portal-link:hover{background:#F7F6F2}input:focus,select:focus,button:focus{outline:none}`}</style>
 
-      {/* Portal Modal */}
       {portalModal && modalProj && (
         <div onClick={() => setPortalModal(null)} style={{ position:'fixed',inset:0,background:'rgba(0,0,0,0.55)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center' }}>
           <div onClick={(e) => e.stopPropagation()} style={{ background:'#fff',borderRadius:18,padding:'28px',width:460,boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
@@ -88,8 +92,18 @@ export default function PortalPage() {
                 </a>
               ))}
             </div>
+            {modalProj.driveUrl && (
+              <a href={modalProj.driveUrl} target="_blank" rel="noopener noreferrer" style={{ display:'flex',alignItems:'center',gap:10,padding:'12px 16px',background:'#F0FDF4',border:'1px solid #86EFAC',borderRadius:10,textDecoration:'none',marginBottom:12 }}>
+                <span style={{ fontSize:20 }}>📁</span>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize:13,fontWeight:600,color:'#166534' }}>Google Drive フォルダを開く</div>
+                  <div style={{ fontSize:11,color:'#4ADE80',marginTop:1 }}>ファイル一覧・アップロード</div>
+                </div>
+                <span style={{ color:'#16a34a',fontWeight:700 }}>→</span>
+              </a>
+            )}
             <button onClick={() => { setSelectedProject(modalProj.id); setPortalModal(null); }} style={{ width:'100%',padding:'11px',background:'#1B1B18',border:'none',borderRadius:10,cursor:'pointer',fontSize:13,color:'#F7F6F2',fontFamily:'inherit',fontWeight:500 }}>
-              📁 {modalProj.name} のファイルを見る
+              📋 {modalProj.name} のファイルを見る
             </button>
           </div>
         </div>
@@ -133,9 +147,14 @@ export default function PortalPage() {
             <p style={{ fontSize:14,color:'#888780',marginTop:4 }}>{selectedProj?selectedProj.description:'5プロジェクト一元管理ポータル'}</p>
           </div>
           <div style={{ display:'flex',gap:10,alignItems:'center' }}>
-            {selectedProject && (
+            {selectedProject && selectedProj?.driveUrl && (
+              <a href={selectedProj.driveUrl} target="_blank" rel="noopener noreferrer" style={{ display:'flex',alignItems:'center',gap:8,padding:'10px 20px',background:'#16a34a',color:'#fff',border:'none',borderRadius:10,cursor:'pointer',fontSize:13,fontWeight:500,textDecoration:'none' }}>
+                📁 Drive
+              </a>
+            )}
+            {selectedProject && selectedProj?.done && (
               <button onClick={() => setPortalModal(selectedProject)} style={{ display:'flex',alignItems:'center',gap:8,padding:'10px 20px',background:selectedProj?.color||'#1B1B18',color:'#fff',border:'none',borderRadius:10,cursor:'pointer',fontSize:13,fontFamily:'inherit',fontWeight:500 }}>
-                🔗 Portal を開く
+                🔗 Portal
               </button>
             )}
             <input ref={fileInputRef} type="file" multiple accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg" onChange={handleUpload} style={{ display:'none' }}/>
@@ -193,16 +212,17 @@ export default function PortalPage() {
             const proj = PROJECTS.find((p) => p.id===file.project);
             const tagStyle = TAG_COLORS[file.tag];
             const typeStyle = TYPE_COLORS[file.type];
+            const canOpen = !!(file.driveUrl || file.objectUrl);
             return (
-              <div key={file.id} className="file-row" onClick={() => file.objectUrl && window.open(file.objectUrl,'_blank')} style={{ display:'grid',gridTemplateColumns:'40px 1fr 120px 90px 80px 110px',padding:'11px 20px',borderBottom:i<filteredFiles.length-1?'0.5px solid #E8E6E0':'none',alignItems:'center' }}>
-                <div style={{ width:28,height:28,borderRadius:6,display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,background:typeStyle.bg }}>{file.type==='DOCX'?'📄':file.type==='PDF'?'📕':file.type==='XLSX'?'📊':file.type==='PNG'?'🖼️':'📎'}</div>
+              <div key={file.id} className="file-row" onClick={() => openFile(file)} style={{ display:'grid',gridTemplateColumns:'40px 1fr 120px 90px 80px 110px',padding:'11px 20px',borderBottom:i<filteredFiles.length-1?'0.5px solid #E8E6E0':'none',alignItems:'center',opacity:canOpen?1:0.6 }}>
+                <div style={{ width:28,height:28,borderRadius:6,display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,background:file.driveUrl?'#E8F5E9':typeStyle.bg }}>{file.driveUrl?'📁':file.type==='DOCX'?'📄':file.type==='PDF'?'📕':file.type==='XLSX'?'📊':file.type==='PNG'?'🖼️':'📎'}</div>
                 <div style={{ paddingRight:12,minWidth:0 }}>
                   <div style={{ fontSize:13,color:'#1B1B18',fontWeight:500,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap' }}>{file.name}</div>
-                  <div style={{ fontSize:11,color:file.objectUrl?'#0891b2':'#888780',marginTop:1 }}>{file.objectUrl?'クリックして開く':file.size}</div>
+                  <div style={{ fontSize:11,color:canOpen?'#16a34a':'#888780',marginTop:1 }}>{canOpen?'クリックして開く →':file.size}</div>
                 </div>
                 <div>{proj?<span style={{ fontSize:12,display:'flex',alignItems:'center',gap:4 }}><span>{proj.icon}</span><span style={{ color:proj.color,fontWeight:500 }}>{proj.nameEn}</span></span>:<span style={{ fontSize:11,color:'#B4B2A9' }}>共通</span>}</div>
                 <div><span style={{ fontSize:11,padding:'3px 8px',borderRadius:20,background:tagStyle.bg,color:tagStyle.text,fontWeight:500 }}>{TAG_LABELS[file.tag]}</span></div>
-                <div><span style={{ fontSize:11,padding:'3px 8px',borderRadius:6,background:typeStyle.bg,color:typeStyle.text,fontWeight:600 }}>{file.type}</span></div>
+                <div><span style={{ fontSize:11,padding:'3px 8px',borderRadius:6,background:file.driveUrl?'#E8F5E9':typeStyle.bg,color:file.driveUrl?'#16a34a':typeStyle.text,fontWeight:600 }}>{file.driveUrl?'Drive':file.type}</span></div>
                 <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between' }}>
                   <span style={{ fontSize:11,color:'#888780' }}>{file.date.slice(5).replace('-','/')}</span>
                   <div className="file-actions" style={{ display:'flex',gap:4,opacity:0,transition:'opacity 0.12s' }}>

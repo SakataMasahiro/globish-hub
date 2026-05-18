@@ -19,6 +19,7 @@ export interface Project {
   status: string;
   description: string;
   portals: SubPortal[];
+  driveUrl: string;
 }
 
 export interface PortalFile {
@@ -30,6 +31,7 @@ export interface PortalFile {
   type: FileType;
   size: string;
   objectUrl?: string;
+  driveUrl?: string;
 }
 
 export const PROJECTS: Project[] = [
@@ -42,6 +44,7 @@ export const PROJECTS: Project[] = [
     done: true,
     status: '完成済',
     description: '歯科医院向けDXプラットフォーム',
+    driveUrl: 'https://drive.google.com/drive/folders/1y6Z_tEKRB2MdAv_ysBswHuxCO5AuFxXv?usp=share_link',
     portals: [
       { name: '歯科医院 Portal', desc: '医院向けダッシュボード', url: 'https://tascal-dental.vercel.app', icon: '🏥' },
       { name: 'Super Admin', desc: '管理者専用画面', url: 'https://tascal-dental.vercel.app/super-admin', icon: '🔐' },
@@ -57,6 +60,7 @@ export const PROJECTS: Project[] = [
     done: true,
     status: '完成済',
     description: '美容サロン向けDXプラットフォーム',
+    driveUrl: 'https://drive.google.com/drive/folders/1LDtF2q9tZByp77GYUZ6WJiZBx5ptokB7?usp=share_link',
     portals: [
       { name: 'Beauty Portal', desc: 'サロン向けダッシュボード', url: 'https://lovebeauty.salon', icon: '✨' },
       { name: 'Super Admin', desc: '管理者専用画面', url: 'https://lovebeauty.salon/super-admin', icon: '🔐' },
@@ -72,6 +76,7 @@ export const PROJECTS: Project[] = [
     done: false,
     status: '展開中',
     description: '準備中',
+    driveUrl: 'https://drive.google.com/drive/folders/1FTSgneUTPadts1SQRKeCBrZxPHEtHrB9?usp=share_link',
     portals: [],
   },
   {
@@ -83,6 +88,7 @@ export const PROJECTS: Project[] = [
     done: false,
     status: '展開中',
     description: '準備中',
+    driveUrl: '',
     portals: [],
   },
   {
@@ -94,6 +100,7 @@ export const PROJECTS: Project[] = [
     done: false,
     status: '展開中',
     description: '準備中',
+    driveUrl: '',
     portals: [],
   },
 ];
@@ -121,12 +128,7 @@ export const TYPE_COLORS: Record<FileType, { bg: string; text: string }> = {
 };
 
 export const INITIAL_FILES: PortalFile[] = [
-  { id: 1, name: 'Tascal_Security_Guide.docx', project: 'dental', tag: 'security', date: '2026-05-17', type: 'DOCX', size: '245 KB' },
-  { id: 2, name: 'Tascal_Security_Guide.docx', project: 'beauty', tag: 'security', date: '2026-05-17', type: 'DOCX', size: '245 KB' },
-  { id: 3, name: 'セキュリティ設定ガイド（全5プロジェクト）.docx', project: null, tag: 'security', date: '2026-05-17', type: 'DOCX', size: '312 KB' },
-  { id: 4, name: 'Anthropic記事（英語翻訳）.pdf', project: null, tag: 'general', date: '2026-05-17', type: 'PDF', size: '890 KB' },
-  { id: 5, name: '利用規約テンプレート.docx', project: null, tag: 'legal', date: '2026-05-15', type: 'DOCX', size: '128 KB' },
-  { id: 6, name: '個人情報保護方針.docx', project: null, tag: 'legal', date: '2026-05-15', type: 'DOCX', size: '156 KB' },
-  { id: 7, name: 'Love Beauty ブランドガイドライン.pdf', project: 'beauty', tag: 'marketing', date: '2026-05-12', type: 'PDF', size: '3.4 MB' },
-  { id: 8, name: 'Tascal Dental マーケティング資料.pdf', project: 'dental', tag: 'marketing', date: '2026-05-10', type: 'PDF', size: '1.2 MB' },
+  { id: 1, name: 'Tascal Dental ファイル一覧', project: 'dental', tag: 'general', date: '2026-05-18', type: 'OTHER', size: 'Google Drive', driveUrl: 'https://drive.google.com/drive/folders/1y6Z_tEKRB2MdAv_ysBswHuxCO5AuFxXv?usp=share_link' },
+  { id: 2, name: 'Love Beauty ファイル一覧', project: 'beauty', tag: 'general', date: '2026-05-18', type: 'OTHER', size: 'Google Drive', driveUrl: 'https://drive.google.com/drive/folders/1LDtF2q9tZByp77GYUZ6WJiZBx5ptokB7?usp=share_link' },
+  { id: 3, name: 'Tascal Touch ファイル一覧', project: 'touch', tag: 'general', date: '2026-05-18', type: 'OTHER', size: 'Google Drive', driveUrl: 'https://drive.google.com/drive/folders/1FTSgneUTPadts1SQRKeCBrZxPHEtHrB9?usp=share_link' },
 ];
