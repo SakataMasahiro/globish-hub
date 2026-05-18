@@ -57,9 +57,9 @@ export const PROJECTS: Project[] = [
     status: '完成済',
     description: '美容サロン向けDXプラットフォーム',
     portals: [
-      { name: 'Beauty Portal', desc: 'サロン向けダッシュボード', url: 'https://lovebeauty-salon.vercel.app', icon: '✨' },
-      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://lovebeauty-salon.vercel.app/super-admin', icon: '🔐' },
-      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://lovebeauty-salon.vercel.app/partner', icon: '🤝' },
+      { name: 'Beauty Portal', desc: 'サロン向けダッシュボード', url: 'https://lovebeauty.salon', icon: '✨' },
+      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://lovebeauty.salon/super-admin', icon: '🔐' },
+      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://lovebeauty.salon/partner', icon: '🤝' },
     ],
   },
   {
