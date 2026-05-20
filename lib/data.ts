@@ -1,4 +1,4 @@
-export type ProjectId = 'dental' | 'beauty' | 'touch' | 'wellness' | 'clinic';
+export type ProjectId = 'dental' | 'beauty' | 'touch' | 'wellness' | 'clinic' | 'life' | 'care';
 export type FileTag = 'security' | 'marketing' | 'legal' | 'general';
 export type FileType = 'DOCX' | 'PDF' | 'XLSX' | 'PNG' | 'OTHER';
 
@@ -102,6 +102,34 @@ export const PROJECTS: Project[] = [
     description: '準備中',
     driveUrl: '',
     portals: [],
+  },
+  {
+    id: 'life',
+    name: 'ライフ・ポータル',
+    nameEn: 'Life Portal',
+    icon: '💼',
+    color: '#185FA5',
+    done: false,
+    status: '開発中',
+    description: '生命保険営業AI支援ポータル「生保くん」',
+    driveUrl: '',
+    portals: [
+      { name: 'ライフ・ポータル', desc: '生保くん — 生命保険営業向け', url: 'https://tascal-life-portal.vercel.app', icon: '💼' },
+    ],
+  },
+  {
+    id: 'care',
+    name: 'ケア・ポータル',
+    nameEn: 'Care Portal',
+    icon: '❤️',
+    color: '#0F6E56',
+    done: false,
+    status: '開発中',
+    description: '介護・訪問介護向けポータル「ケア愛ちゃん」',
+    driveUrl: '',
+    portals: [
+      { name: 'ケア・ポータル', desc: 'ケア愛ちゃん — 介護向け', url: 'https://careflow-ai-chan.vercel.app', icon: '❤️' },
+    ],
   },
 ];
 
