@@ -63,6 +63,26 @@ const portals = [
       { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
     ],
   },
+  {
+    id: 'life',
+    name: 'ライフ・ポータル',
+    icon: '💼',
+    status: 'coming',
+    color: '#185FA5',
+    portals: [
+      { name: 'ライフ・ポータル', desc: '生保くん — 生命保険営業向け', url: 'https://tascal-life-portal.vercel.app', icon: '💼' },
+    ],
+  },
+  {
+    id: 'care',
+    name: 'ケア・ポータル',
+    icon: '❤️',
+    status: 'coming',
+    color: '#0F6E56',
+    portals: [
+      { name: 'ケア・ポータル', desc: 'ケア愛ちゃん — 介護向け', url: 'https://careflow-ai-chan.vercel.app', icon: '❤️' },
+    ],
+  },
 ];
 
 const C = {
@@ -128,7 +148,6 @@ export default function Home() {
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: "'Noto Sans JP', sans-serif", color: C.text }}>
 
-      {/* Header */}
       <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: '0 2rem', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ fontSize: 24 }}>🌐</span>
@@ -145,7 +164,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Main */}
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '2.5rem 2rem' }}>
 
         <div style={{ marginBottom: '2rem' }}>
@@ -153,12 +171,11 @@ export default function Home() {
           <p style={{ color: C.muted, fontSize: 13 }}>クリックするだけで各Portalに直接アクセスできます</p>
         </div>
 
-        {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
           {[
-            { label: '総サービス数', value: '5', color: '#0891b2' },
+            { label: '総サービス数', value: '7', color: '#0891b2' },
             { label: '稼働中', value: '2', color: '#10b981' },
-            { label: '総Portal数', value: '15', color: '#7c3aed' },
+            { label: '総Portal数', value: '17', color: '#7c3aed' },
           ].map((s, i) => (
             <div key={i} style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 12, padding: '1.25rem', borderTop: `3px solid ${s.color}` }}>
               <div style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>{s.label}</div>
@@ -167,7 +184,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Portal Cards */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {portals.map(service => (
             <div key={service.id} style={{
@@ -175,7 +191,6 @@ export default function Home() {
               borderRadius: 14, overflow: 'hidden',
               opacity: service.status === 'coming' ? 0.6 : 1,
             }}>
-              {/* Service Header */}
               <div style={{
                 padding: '14px 20px', borderBottom: `1px solid ${C.border}`,
                 display: 'flex', alignItems: 'center', gap: 12,
@@ -193,10 +208,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Portal Links */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${service.portals.length}, 1fr)` }}>
                 {service.portals.map((portal, i) => (
-                  <div key={i} style={{ borderRight: i < 2 ? `1px solid ${C.border}` : 'none' }}>
+                  <div key={i} style={{ borderRight: i < service.portals.length - 1 ? `1px solid ${C.border}` : 'none' }}>
                     {service.status === 'active' && portal.url ? (
                       <a href={portal.url} target="_blank" rel="noopener noreferrer" style={{
                         display: 'flex', flexDirection: 'column', gap: 6, padding: '18px 20px',
@@ -224,7 +238,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Footer */}
         <div style={{ textAlign: 'center', marginTop: '3rem', padding: '1.5rem 0', borderTop: `1px solid ${C.border}`, color: C.muted, fontSize: 12 }}>
           Globish International Co., Ltd. — CEO: Masahiro Sakata — Kuala Lumpur, Malaysia
         </div>
