@@ -14,6 +14,9 @@ const portals = [
       { name: 'Super Admin', desc: '管理者専用画面', url: 'https://tascal-dental.vercel.app/super-admin', icon: '🔐' },
       { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://tascal-dental.vercel.app/partner', icon: '🤝' },
     ],
+    docs: [
+      { name: '設計書・ブランド資料', url: 'https://drive.google.com/drive/folders/1y6Z_tEKRB2MdAv_ysBswHuxCO5AuFxXv', icon: '📁' },
+    ],
   },
   {
     id: 'beauty',
@@ -25,6 +28,9 @@ const portals = [
       { name: 'Beauty Portal', desc: 'サロン向けダッシュボード', url: 'https://lovebeauty.salon', icon: '✨' },
       { name: 'Super Admin', desc: '管理者専用画面', url: 'https://lovebeauty.salon/super-admin', icon: '🔐' },
       { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://lovebeauty.salon/partner', icon: '🤝' },
+    ],
+    docs: [
+      { name: '設計書・ブランド資料', url: 'https://drive.google.com/drive/folders/1LDtF2q9tZByp77GYUZ6WJiZBx5ptokB7', icon: '📁' },
     ],
   },
   {
@@ -38,6 +44,9 @@ const portals = [
       { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
       { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
     ],
+    docs: [
+      { name: '設計書・資料', url: 'https://drive.google.com/drive/folders/1FTSgneUTPadts1SQRKeCBrZxPHEtHrB9', icon: '📁' },
+    ],
   },
   {
     id: 'wellness',
@@ -50,6 +59,7 @@ const portals = [
       { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
       { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
     ],
+    docs: [],
   },
   {
     id: 'clinic',
@@ -62,6 +72,7 @@ const portals = [
       { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
       { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
     ],
+    docs: [],
   },
   {
     id: 'life',
@@ -71,6 +82,9 @@ const portals = [
     color: '#185FA5',
     portals: [
       { name: 'ライフ・ポータル', desc: '生保くん — 生命保険営業向け', url: 'https://tascal-life-portal.vercel.app', icon: '💼' },
+    ],
+    docs: [
+      { name: '設計書・ブランド資料', url: '', icon: '📁' },
     ],
   },
   {
@@ -82,6 +96,7 @@ const portals = [
     portals: [
       { name: 'ケア・ポータル', desc: 'ケア愛ちゃん — 介護向け', url: 'https://careflow-ai-chan.vercel.app', icon: '❤️' },
     ],
+    docs: [],
   },
 ];
 
@@ -125,20 +140,10 @@ export default function Home() {
             onChange={e => setPw(e.target.value)}
             placeholder="パスワードを入力"
             autoFocus
-            style={{
-              width: '100%', padding: '13px 16px', background: '#F8F7F4',
-              border: `1.5px solid ${pwError ? '#ef4444' : '#E8E6E0'}`,
-              borderRadius: 10, color: '#1A1A18', fontSize: 15, outline: 'none',
-              marginBottom: '1rem', boxSizing: 'border-box', fontFamily: 'inherit',
-            }}
+            style={{ width: '100%', padding: '13px 16px', background: '#F8F7F4', border: `1.5px solid ${pwError ? '#ef4444' : '#E8E6E0'}`, borderRadius: 10, color: '#1A1A18', fontSize: 15, outline: 'none', marginBottom: '1rem', boxSizing: 'border-box', fontFamily: 'inherit' }}
           />
           {pwError && <p style={{ color: '#ef4444', fontSize: 12, marginBottom: '0.75rem' }}>パスワードが違います</p>}
-          <button type="submit" style={{
-            width: '100%', padding: '13px',
-            background: '#185FA5',
-            border: 'none', borderRadius: 10, color: '#fff',
-            fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
-          }}>
+          <button type="submit" style={{ width: '100%', padding: '13px', background: '#185FA5', border: 'none', borderRadius: 10, color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>
             ログイン →
           </button>
         </form>
@@ -190,39 +195,23 @@ export default function Home() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {portals.map(service => (
-            <div key={service.id} style={{
-              background: C.surface,
-              border: `1px solid ${C.border}`,
-              borderRadius: 16,
-              overflow: 'hidden',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-            }}>
-              <div style={{
-                padding: '14px 20px',
-                borderBottom: `1px solid ${C.border}`,
-                display: 'flex', alignItems: 'center', gap: 12,
-                background: `${service.color}10`,
-              }}>
+            <div key={service.id} style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+
+              {/* ヘッダー */}
+              <div style={{ padding: '14px 20px', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 12, background: `${service.color}10` }}>
                 <span style={{ fontSize: 24 }}>{service.icon}</span>
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#1A1A18' }}>{service.name}</div>
-                <div style={{
-                  marginLeft: 'auto', fontSize: 11, padding: '4px 12px', borderRadius: 99, fontWeight: 600,
-                  background: service.status === 'active' ? '#EAF3DE' : '#F8F7F4',
-                  color: service.status === 'active' ? '#0F6E56' : '#6B6A64',
-                  border: `1px solid ${service.status === 'active' ? '#C0DD97' : '#E8E6E0'}`,
-                }}>
+                <div style={{ marginLeft: 'auto', fontSize: 11, padding: '4px 12px', borderRadius: 99, fontWeight: 600, background: service.status === 'active' ? '#EAF3DE' : '#F8F7F4', color: service.status === 'active' ? '#0F6E56' : '#6B6A64', border: `1px solid ${service.status === 'active' ? '#C0DD97' : '#E8E6E0'}` }}>
                   {service.status === 'active' ? '✅ 稼働中' : '🔧 開発中'}
                 </div>
               </div>
 
+              {/* ポータルリンク */}
               <div style={{ display: 'grid', gridTemplateColumns: `repeat(${service.portals.length}, 1fr)` }}>
                 {service.portals.map((portal, i) => (
                   <div key={i} style={{ borderRight: i < service.portals.length - 1 ? `1px solid ${C.border}` : 'none' }}>
                     {service.status === 'active' && portal.url ? (
-                      <a href={portal.url} target="_blank" rel="noopener noreferrer" style={{
-                        display: 'flex', flexDirection: 'column', gap: 5, padding: '16px 20px',
-                        textDecoration: 'none', transition: 'background 0.15s', cursor: 'pointer',
-                      }}
+                      <a href={portal.url} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', flexDirection: 'column', gap: 5, padding: '16px 20px', textDecoration: 'none', transition: 'background 0.15s' }}
                         onMouseEnter={e => (e.currentTarget.style.background = `${service.color}10`)}
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
@@ -241,6 +230,28 @@ export default function Home() {
                   </div>
                 ))}
               </div>
+
+              {/* ドキュメントセクション */}
+              {service.docs && service.docs.length > 0 && (
+                <div style={{ borderTop: `1px solid ${C.border}`, padding: '10px 20px', background: '#FAFAF8', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: 11, color: '#6B6A64', fontWeight: 600, letterSpacing: '0.05em', marginRight: 4 }}>📄 ドキュメント</span>
+                  {service.docs.map((doc, i) => (
+                    doc.url ? (
+                      <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '4px 12px', background: '#FFFFFF', border: `1px solid ${C.border}`, borderRadius: 99, fontSize: 12, color: service.color, textDecoration: 'none', fontWeight: 500, transition: 'border-color 0.12s' }}
+                        onMouseEnter={e => (e.currentTarget.style.borderColor = service.color)}
+                        onMouseLeave={e => (e.currentTarget.style.borderColor = C.border)}
+                      >
+                        <span>{doc.icon}</span>{doc.name}
+                      </a>
+                    ) : (
+                      <span key={i} style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '4px 12px', background: '#F1EFE8', border: `1px solid ${C.border}`, borderRadius: 99, fontSize: 12, color: '#B4B2A9', fontWeight: 500 }}>
+                        <span>{doc.icon}</span>{doc.name}（準備中）
+                      </span>
+                    )
+                  ))}
+                </div>
+              )}
+
             </div>
           ))}
         </div>
