@@ -78,7 +78,7 @@ const portals = [
     id: 'life',
     name: 'ライフ・ポータル',
     icon: '💼',
-    status: 'coming',
+    status: 'active',
     color: '#185FA5',
     portals: [
       { name: 'ライフ・ポータル', desc: '生保くん — 生命保険営業向け', url: 'https://tascal-life-portal.vercel.app', icon: '💼' },
