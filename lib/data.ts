@@ -1,4 +1,4 @@
-export type ProjectId = 'dental' | 'beauty' | 'touch' | 'wellness' | 'clinic' | 'life' | 'care';
+export type ProjectId = 'dental' | 'beauty' | 'touch' | 'manabi' | 'pet';
 export type FileTag = 'security' | 'marketing' | 'legal' | 'general';
 export type FileType = 'DOCX' | 'PDF' | 'XLSX' | 'PNG' | 'OTHER';
 
@@ -80,56 +80,28 @@ export const PROJECTS: Project[] = [
     portals: [],
   },
   {
-    id: 'wellness',
-    name: 'Tascal Wellness',
-    nameEn: 'Wellness',
-    icon: '🌿',
-    color: '#059669',
+    id: 'manabi',
+    name: 'Tascal Manabi（学び）',
+    nameEn: 'Manabi',
+    icon: '📚',
+    color: '#f59e0b',
     done: false,
-    status: '展開中',
-    description: '準備中',
+    status: '開発中',
+    description: '学習塾・習い事教室向けDXプラットフォーム — 成長の証人',
     driveUrl: '',
     portals: [],
   },
   {
-    id: 'clinic',
-    name: 'Tascal Clinic',
-    nameEn: 'Clinic',
-    icon: '🏥',
-    color: '#dc2626',
+    id: 'pet',
+    name: 'Tascal Pet',
+    nameEn: 'Pet',
+    icon: '🐾',
+    color: '#10b981',
     done: false,
-    status: '展開中',
-    description: '準備中',
+    status: '構築準備中',
+    description: 'ペット関連サービス向けDXプラットフォーム',
     driveUrl: '',
     portals: [],
-  },
-  {
-    id: 'life',
-    name: 'ライフ・ポータル',
-    nameEn: 'Life Portal',
-    icon: '💼',
-    color: '#185FA5',
-    done: false,
-    status: '開発中',
-    description: '生命保険営業AI支援ポータル「生保くん」',
-    driveUrl: '',
-    portals: [
-      { name: 'ライフ・ポータル', desc: '生保くん — 生命保険営業向け', url: 'https://tascal-life-portal.vercel.app', icon: '💼' },
-    ],
-  },
-  {
-    id: 'care',
-    name: 'ケア・ポータル',
-    nameEn: 'Care Portal',
-    icon: '❤️',
-    color: '#0F6E56',
-    done: false,
-    status: '開発中',
-    description: '介護・訪問介護向けポータル「ケア愛ちゃん」',
-    driveUrl: '',
-    portals: [
-      { name: 'ケア・ポータル', desc: 'ケア愛ちゃん — 介護向け', url: 'https://careflow-ai-chan.vercel.app', icon: '❤️' },
-    ],
   },
 ];
 
