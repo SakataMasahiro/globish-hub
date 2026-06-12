@@ -1,174 +1,234 @@
-import Link from "next/link";
+'use client';
 
-export default function HomePage() {
+import { useState } from 'react';
+
+const portals = [
+  {
+    id: 'dental',
+    name: 'Tascal Dental',
+    icon: '🦷',
+    status: 'active',
+    color: '#0891b2',
+    portals: [
+      { name: '歯科医院 Portal', desc: '医院向けダッシュボード', url: 'https://tascal-dental.vercel.app', icon: '🏥' },
+      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://tascal-dental.vercel.app/super-admin', icon: '🔐' },
+      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://tascal-dental.vercel.app/partner', icon: '🤝' },
+    ],
+  },
+  {
+    id: 'beauty',
+    name: 'Love Beauty',
+    icon: '💄',
+    status: 'active',
+    color: '#e91e8c',
+    portals: [
+      { name: 'Beauty Portal', desc: 'サロン向けダッシュボード', url: 'https://lovebeauty.salon', icon: '✨' },
+      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://lovebeauty.salon/super-admin', icon: '🔐' },
+      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://lovebeauty.salon/partner', icon: '🤝' },
+    ],
+  },
+  {
+    id: 'touch',
+    name: 'Tascal Touch',
+    icon: '👆',
+    status: 'coming',
+    color: '#7c3aed',
+    portals: [
+      { name: 'Touch Portal', desc: '準備中', url: '', icon: '🏢' },
+      { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
+      { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
+    ],
+  },
+  {
+    id: 'manabi',
+    name: 'Tascal Manabi（学び）',
+    icon: '📚',
+    status: 'coming',
+    color: '#f59e0b',
+    portals: [
+      { name: 'Manabi Portal', desc: '開発中 — 学習塾・習い事教室向け', url: '', icon: '🎓' },
+      { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
+      { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
+    ],
+  },
+  {
+    id: 'pet',
+    name: 'Tascal Pet',
+    icon: '🐾',
+    status: 'coming',
+    color: '#10b981',
+    portals: [
+      { name: 'Pet Portal', desc: '構築準備中', url: '', icon: '🐕' },
+      { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
+      { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
+    ],
+  },
+];
+
+const C = {
+  bg: '#0D1117',
+  surface: '#161B22',
+  border: '#30363D',
+  text: '#F0F6FC',
+  muted: '#8B949E',
+};
+
+export default function Home() {
+  const [pw, setPw] = useState('');
+  const [authed, setAuthed] = useState(false);
+  const [pwError, setPwError] = useState(false);
+
+  function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    if (pw === 'Norikosan1947##') {
+      setAuthed(true);
+    } else {
+      setPwError(true);
+      setTimeout(() => setPwError(false), 2000);
+    }
+  }
+
+  if (!authed) return (
+    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Noto Sans JP', sans-serif" }}>
+      <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 16, padding: '3rem', width: 380, boxShadow: '0 25px 60px rgba(0,0,0,0.5)' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div style={{ fontSize: 48, marginBottom: 12 }}>🌐</div>
+          <div style={{ fontSize: 11, color: C.muted, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 6 }}>Globish International</div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: C.text }}>Portal Hub</div>
+          <div style={{ fontSize: 12, color: C.muted, marginTop: 4 }}>坂田さん専用</div>
+        </div>
+        <form onSubmit={handleLogin}>
+          <input
+            type="password"
+            value={pw}
+            onChange={e => setPw(e.target.value)}
+            placeholder="パスワードを入力"
+            autoFocus
+            style={{
+              width: '100%', padding: '12px 16px', background: C.bg,
+              border: `1px solid ${pwError ? '#ef4444' : C.border}`,
+              borderRadius: 8, color: C.text, fontSize: 15, outline: 'none',
+              marginBottom: '1rem', boxSizing: 'border-box', fontFamily: 'inherit',
+            }}
+          />
+          {pwError && <p style={{ color: '#ef4444', fontSize: 12, marginBottom: '0.75rem' }}>パスワードが違います</p>}
+          <button type="submit" style={{
+            width: '100%', padding: '13px',
+            background: 'linear-gradient(135deg, #0891b2, #0e7490)',
+            border: 'none', borderRadius: 8, color: '#fff',
+            fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
+          }}>
+            ログイン →
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+
   return (
-    <div style={{ fontFamily: "Arial, sans-serif", color: "#1A1A1A" }}>
+    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: "'Noto Sans JP', sans-serif", color: C.text }}>
 
-      {/* ヒーローセクション */}
-      <div style={{ background: "linear-gradient(135deg, #0D2137, #185FA5)", padding: "80px 40px", textAlign: "center" as const, color: "white" }}>
-        <div style={{ marginBottom: "32px" }}>
-          <div style={{ fontSize: "42px", fontWeight: "bold", letterSpacing: "2px", marginBottom: "6px" }}>
-            ライフ・ポータル
-          </div>
-          <div style={{ fontSize: "13px", opacity: 0.7, letterSpacing: "3px" }}>
-            Tascalでたすかる — Powered by Globish International
+      {/* Header */}
+      <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: '0 2rem', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: 24 }}>🌐</span>
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 700 }}>Globish Portal Hub</div>
+            <div style={{ fontSize: 10, color: '#0891b2', letterSpacing: '0.15em', textTransform: 'uppercase' }}>全サービス一元管理</div>
           </div>
         </div>
-        <h1 style={{ fontSize: "28px", fontWeight: "bold", margin: "0 0 16px", lineHeight: "1.6", opacity: 0.95 }}>
-          生命保険営業の仕事を、<br />AIが丸ごとサポートする
-        </h1>
-        <p style={{ fontSize: "16px", opacity: 0.85, margin: "0 0 16px", lineHeight: "1.8" }}>
-          顧客管理・感情スコア・AI提案書・紹介ネットワーク・コミッション管理まで<br />
-          すべてひとつの画面で。使えば使うほど、あなただけの武器になる。
-        </p>
-        <p style={{ fontSize: "14px", opacity: 0.75, margin: "0 0 32px" }}>
-          ✅ マレーシア法人運営につき消費税不要（10%お得）
-        </p>
-        <Link href="/auth/register" style={{ display: "inline-block", padding: "18px 48px", background: "#00B900", color: "white", borderRadius: "12px", textDecoration: "none", fontWeight: "bold", fontSize: "18px", boxShadow: "0 4px 16px rgba(0,185,0,0.4)" }}>
-          🚀 14日間無料で試す
-        </Link>
-        <p style={{ marginTop: "20px", fontSize: "13px", opacity: 0.75 }}>
-          クレジットカード不要・いつでもキャンセル可能
-        </p>
-      </div>
-
-      {/* 数字で見る効果 */}
-      <div style={{ background: "#F8F9FA", padding: "60px 40px" }}>
-        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-          <h2 style={{ textAlign: "center" as const, fontSize: "24px", color: "#0D2137", marginBottom: "40px" }}>ライフ・ポータルを使うと変わること</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px" }}>
-            {[
-              { value: "64%", label: "紹介経由の成約率", icon: "🤝" },
-              { value: "3倍", label: "提案書作成スピード", icon: "⚡" },
-              { value: "0件", label: "更新失効を目指す", icon: "🔔" },
-              { value: "14日", label: "無料トライアル", icon: "🎁" },
-            ].map((stat, i) => (
-              <div key={i} style={{ background: "white", borderRadius: "16px", padding: "28px 20px", textAlign: "center" as const, boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
-                <div style={{ fontSize: "32px", marginBottom: "8px" }}>{stat.icon}</div>
-                <div style={{ fontSize: "36px", fontWeight: "bold", color: "#185FA5", marginBottom: "8px" }}>{stat.value}</div>
-                <div style={{ fontSize: "13px", color: "#888" }}>{stat.label}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ fontSize: 12, color: C.muted }}>坂田昌鴻</div>
+          <button onClick={() => setAuthed(false)} style={{ padding: '6px 14px', background: '#ef444415', border: '1px solid #ef444430', borderRadius: 8, color: '#ef4444', fontSize: 12, cursor: 'pointer' }}>
+            ログアウト
+          </button>
         </div>
       </div>
 
-      {/* 機能紹介 */}
-      <div style={{ padding: "60px 40px" }}>
-        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-          <h2 style={{ textAlign: "center" as const, fontSize: "24px", color: "#0D2137", marginBottom: "8px" }}>ライフ・ポータルでできること</h2>
-          <p style={{ textAlign: "center" as const, color: "#888", marginBottom: "40px", fontSize: "15px" }}>
-            お客様との感情的な絆を育て、契約が自然に増える仕組みを作る。
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
-            {[
-              { icon: "❤️", title: "感情温度スコア", desc: "顧客との関係を0〜100でAIが数値化。今日誰に連絡すべきかが一目でわかる。" },
-              { icon: "✨", title: "AI提案書生成", desc: "顧客の情報を入れるだけで、その人専用の保険提案書が30秒で完成。" },
-              { icon: "🌐", title: "紹介ネットワーク", desc: "誰が誰を紹介してくれたかをツリー表示。紹介依頼の最適タイミングをAIが教える。" },
-              { icon: "🔔", title: "フォローアップアラート", desc: "定期更新・払込終了・ライフイベントなど全イベントを一元管理。失効ゼロへ。" },
-              { icon: "💰", title: "コミッション管理", desc: "今月・今年の収入をリアルタイム表示。あと何件で目標達成かが毎朝わかる。" },
-              { icon: "🤖", title: "AIメッセージ生成", desc: "誕生日・お礼・フォロー文章をAIが30秒で作成。送るだけでいい。" },
-            ].map((feature, i) => (
-              <div key={i} style={{ background: "white", borderRadius: "16px", padding: "28px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", border: "1px solid #EEE" }}>
-                <div style={{ fontSize: "36px", marginBottom: "12px" }}>{feature.icon}</div>
-                <h3 style={{ fontSize: "16px", color: "#0D2137", margin: "0 0 8px" }}>{feature.title}</h3>
-                <p style={{ fontSize: "13px", color: "#666", margin: 0, lineHeight: "1.7" }}>{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* Main */}
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: '2.5rem 2rem' }}>
 
-      {/* 料金プラン */}
-      <div style={{ background: "#F8F9FA", padding: "60px 40px" }}>
-        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-          <h2 style={{ textAlign: "center" as const, fontSize: "24px", color: "#0D2137", marginBottom: "8px" }}>シンプルな料金プラン</h2>
-          <p style={{ textAlign: "center" as const, color: "#888", marginBottom: "8px", fontSize: "15px" }}>
-            機能はすごい。価格は驚くほど安い。
-          </p>
-          <p style={{ textAlign: "center" as const, color: "#185FA5", marginBottom: "40px", fontSize: "14px", fontWeight: "bold" }}>
-            ✅ マレーシア法人運営につき消費税不要。日本の競合より常に10%お得。
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "24px" }}>
-            {/* スタンダード */}
-            <div style={{ background: "white", borderRadius: "20px", padding: "32px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", border: "1px solid #EEE" }}>
-              <h3 style={{ fontSize: "20px", color: "#185FA5", margin: "0 0 8px" }}>スタンダード</h3>
-              <div style={{ fontSize: "36px", fontWeight: "bold", color: "#0D2137", marginBottom: "4px" }}>
-                ¥1,000<span style={{ fontSize: "14px", color: "#888" }}>/月</span>
-              </div>
-              <p style={{ fontSize: "12px", color: "#888", margin: "0 0 20px" }}>14日間無料トライアル付き</p>
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px" }}>
-                {["顧客・契約一元管理", "フォローアップアラート", "ライフイベント登録", "パイプライン管理", "コミッション計算", "音声メモ入力"].map((f, j) => (
-                  <li key={j} style={{ fontSize: "14px", color: "#333", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ color: "#00B900" }}>✅</span>{f}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/auth/register?plan=standard" style={{ display: "block", padding: "14px", background: "#185FA5", color: "white", borderRadius: "8px", textDecoration: "none", fontWeight: "bold", fontSize: "15px", textAlign: "center" as const }}>
-                14日間無料で始める
-              </Link>
+        <div style={{ marginBottom: '2rem' }}>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>Portal 一覧</h1>
+          <p style={{ color: C.muted, fontSize: 13 }}>クリックするだけで各Portalに直接アクセスできます</p>
+        </div>
+
+        {/* Stats */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
+          {[
+            { label: '総サービス数', value: '5', color: '#0891b2' },
+            { label: '稼働中', value: '2', color: '#10b981' },
+            { label: '総Portal数', value: '15', color: '#7c3aed' },
+          ].map((s, i) => (
+            <div key={i} style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 12, padding: '1.25rem', borderTop: `3px solid ${s.color}` }}>
+              <div style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>{s.label}</div>
+              <div style={{ fontSize: 32, fontWeight: 800, color: s.color }}>{s.value}</div>
             </div>
+          ))}
+        </div>
 
-            {/* プレミアム */}
-            <div style={{ background: "white", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 32px rgba(24,95,165,0.2)", border: "2px solid #185FA5", position: "relative" as const }}>
-              <div style={{ position: "absolute" as const, top: "-14px", left: "50%", transform: "translateX(-50%)", background: "#185FA5", color: "white", padding: "4px 20px", borderRadius: "20px", fontSize: "12px", fontWeight: "bold" }}>
-                最も選ばれています
+        {/* Portal Cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {portals.map(service => (
+            <div key={service.id} style={{
+              background: C.surface, border: `1px solid ${C.border}`,
+              borderRadius: 14, overflow: 'hidden',
+              opacity: service.status === 'coming' ? 0.6 : 1,
+            }}>
+              {/* Service Header */}
+              <div style={{
+                padding: '14px 20px', borderBottom: `1px solid ${C.border}`,
+                display: 'flex', alignItems: 'center', gap: 12,
+                background: `${service.color}10`,
+              }}>
+                <span style={{ fontSize: 22 }}>{service.icon}</span>
+                <div style={{ fontSize: 16, fontWeight: 700 }}>{service.name}</div>
+                <div style={{
+                  marginLeft: 'auto', fontSize: 11, padding: '3px 10px', borderRadius: 12, fontWeight: 700,
+                  background: service.status === 'active' ? '#10b98120' : '#8B949E20',
+                  color: service.status === 'active' ? '#10b981' : C.muted,
+                  border: `1px solid ${service.status === 'active' ? '#10b98140' : '#8B949E40'}`,
+                }}>
+                  {service.status === 'active' ? '✅ 稼働中' : '🔧 開発中'}
+                </div>
               </div>
-              <h3 style={{ fontSize: "20px", color: "#185FA5", margin: "0 0 8px" }}>プレミアム</h3>
-              <div style={{ fontSize: "36px", fontWeight: "bold", color: "#0D2137", marginBottom: "4px" }}>
-                ¥2,500<span style={{ fontSize: "14px", color: "#888" }}>/月</span>
-              </div>
-              <p style={{ fontSize: "12px", color: "#888", margin: "0 0 20px" }}>14日間無料トライアル付き</p>
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px" }}>
-                {["スタンダードの全機能", "感情温度AI分析", "AI提案書生成", "家族マップ＋AIインサイト", "紹介依頼タイミングAI", "紹介ネットワーク可視化", "AIメッセージ自動生成"].map((f, j) => (
-                  <li key={j} style={{ fontSize: "14px", color: "#333", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ color: "#00B900" }}>✅</span>{f}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/auth/register?plan=premium" style={{ display: "block", padding: "14px", background: "#185FA5", color: "white", borderRadius: "8px", textDecoration: "none", fontWeight: "bold", fontSize: "15px", textAlign: "center" as const }}>
-                14日間無料で始める
-              </Link>
-            </div>
 
-            {/* チーム */}
-            <div style={{ background: "white", borderRadius: "20px", padding: "32px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", border: "1px solid #EEE" }}>
-              <h3 style={{ fontSize: "20px", color: "#185FA5", margin: "0 0 8px" }}>チーム</h3>
-              <div style={{ fontSize: "36px", fontWeight: "bold", color: "#0D2137", marginBottom: "4px" }}>
-                ¥1,000<span style={{ fontSize: "14px", color: "#888" }}>/人・月</span>
-              </div>
-              <p style={{ fontSize: "12px", color: "#888", margin: "0 0 20px" }}>14日間無料・最低5名から</p>
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px" }}>
-                {["プレミアムの全機能", "管理者ダッシュボード", "顧客引き継ぎ機能", "チーム成約率レポート", "優秀事例の共有", "専任サポート担当"].map((f, j) => (
-                  <li key={j} style={{ fontSize: "14px", color: "#333", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ color: "#00B900" }}>✅</span>{f}
-                  </li>
+              {/* Portal Links */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+                {service.portals.map((portal, i) => (
+                  <div key={i} style={{ borderRight: i < 2 ? `1px solid ${C.border}` : 'none' }}>
+                    {service.status === 'active' && portal.url ? (
+                      <a href={portal.url} target="_blank" rel="noopener noreferrer" style={{
+                        display: 'flex', flexDirection: 'column', gap: 6, padding: '18px 20px',
+                        textDecoration: 'none', transition: 'background 0.15s',
+                      }}
+                        onMouseEnter={e => (e.currentTarget.style.background = `${service.color}15`)}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        <span style={{ fontSize: 22 }}>{portal.icon}</span>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{portal.name}</span>
+                        <span style={{ fontSize: 11, color: C.muted }}>{portal.desc}</span>
+                        <span style={{ fontSize: 10, color: service.color, marginTop: 4 }}>→ 開く</span>
+                      </a>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '18px 20px' }}>
+                        <span style={{ fontSize: 22 }}>{portal.icon}</span>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: C.muted }}>{portal.name}</span>
+                        <span style={{ fontSize: 11, color: C.muted }}>{portal.desc}</span>
+                      </div>
+                    )}
+                  </div>
                 ))}
-              </ul>
-              <Link href="/auth/register?plan=team" style={{ display: "block", padding: "14px", background: "#185FA5", color: "white", borderRadius: "8px", textDecoration: "none", fontWeight: "bold", fontSize: "15px", textAlign: "center" as const }}>
-                チームで相談する
-              </Link>
+              </div>
             </div>
-          </div>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div style={{ textAlign: 'center', marginTop: '3rem', padding: '1.5rem 0', borderTop: `1px solid ${C.border}`, color: C.muted, fontSize: 12 }}>
+          Globish International Co., Ltd. — CEO: Masahiro Sakata — Kuala Lumpur, Malaysia
         </div>
       </div>
-
-      {/* CTA */}
-      <div style={{ background: "linear-gradient(135deg, #0D2137, #185FA5)", padding: "60px 40px", textAlign: "center" as const, color: "white" }}>
-        <h2 style={{ fontSize: "28px", margin: "0 0 16px" }}>今すぐ無料で始めましょう</h2>
-        <p style={{ fontSize: "16px", opacity: 0.9, margin: "0 0 32px", lineHeight: "1.8" }}>
-          使えば使うほど、あなただけの武器になる。<br />
-          お客様との感情的な絆を育て、契約が自然に増える仕組みを。
-        </p>
-        <Link href="/auth/register" style={{ display: "inline-block", padding: "20px 48px", background: "#00B900", color: "white", borderRadius: "12px", textDecoration: "none", fontWeight: "bold", fontSize: "20px", boxShadow: "0 4px 16px rgba(0,185,0,0.4)" }}>
-          🚀 14日間無料トライアルを始める
-        </Link>
-        <p style={{ marginTop: "16px", fontSize: "13px", opacity: 0.7 }}>
-          クレジットカード不要・いつでもキャンセル可能・消費税不要
-        </p>
-      </div>
-
     </div>
   );
 }
-
