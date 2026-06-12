@@ -73,11 +73,13 @@ export const PROJECTS: Project[] = [
     nameEn: 'Touch',
     icon: '✋',
     color: '#7c3aed',
-    done: false,
-    status: '展開中',
-    description: '準備中',
+    done: true,
+    status: '完成済',
+    description: '整骨院・整体・鍼灸院向けLINE自動化プラットフォーム',
     driveUrl: 'https://drive.google.com/drive/folders/1FTSgneUTPadts1SQRKeCBrZxPHEtHrB9?usp=share_link',
-    portals: [],
+    portals: [
+      { name: 'Touch Portal', desc: '治療院向けダッシュボード', url: 'https://tascal-touch.vercel.app', icon: '✋' },
+    ],
   },
   {
     id: 'manabi',

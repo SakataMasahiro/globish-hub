@@ -1,69 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-
-const portals = [
-  {
-    id: 'dental',
-    name: 'Tascal Dental',
-    icon: '🦷',
-    status: 'active',
-    color: '#0891b2',
-    portals: [
-      { name: '歯科医院 Portal', desc: '医院向けダッシュボード', url: 'https://tascal-dental.vercel.app', icon: '🏥' },
-      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://tascal-dental.vercel.app/super-admin', icon: '🔐' },
-      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://tascal-dental.vercel.app/partner', icon: '🤝' },
-    ],
-  },
-  {
-    id: 'beauty',
-    name: 'Love Beauty',
-    icon: '💄',
-    status: 'active',
-    color: '#e91e8c',
-    portals: [
-      { name: 'Beauty Portal', desc: 'サロン向けダッシュボード', url: 'https://lovebeauty.salon', icon: '✨' },
-      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://lovebeauty.salon/super-admin', icon: '🔐' },
-      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://lovebeauty.salon/partner', icon: '🤝' },
-    ],
-  },
-  {
-    id: 'touch',
-    name: 'Tascal Touch',
-    icon: '👆',
-    status: 'coming',
-    color: '#7c3aed',
-    portals: [
-      { name: 'Touch Portal', desc: '準備中', url: '', icon: '🏢' },
-      { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
-      { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
-    ],
-  },
-  {
-    id: 'manabi',
-    name: 'Tascal Manabi（学び）',
-    icon: '📚',
-    status: 'coming',
-    color: '#f59e0b',
-    portals: [
-      { name: 'Manabi Portal', desc: '開発中 — 学習塾・習い事教室向け', url: '', icon: '🎓' },
-      { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
-      { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
-    ],
-  },
-  {
-    id: 'pet',
-    name: 'Tascal Pet',
-    icon: '🐾',
-    status: 'coming',
-    color: '#10b981',
-    portals: [
-      { name: 'Pet Portal', desc: '構築準備中', url: '', icon: '🐕' },
-      { name: 'Super Admin', desc: '準備中', url: '', icon: '🔐' },
-      { name: 'Partner Portal', desc: '準備中', url: '', icon: '🤝' },
-    ],
-  },
-];
+import { PROJECTS } from '@/lib/data';
 
 const C = {
   bg: '#0D1117',
@@ -77,6 +15,12 @@ export default function Home() {
   const [pw, setPw] = useState('');
   const [authed, setAuthed] = useState(false);
   const [pwError, setPwError] = useState(false);
+
+  const stats = {
+    services: PROJECTS.length,
+    active: PROJECTS.filter(p => p.done).length,
+    portals: PROJECTS.reduce((n, p) => n + p.portals.length, 0),
+  };
 
   function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -138,6 +82,9 @@ export default function Home() {
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <a href="/portal" style={{ padding: '6px 14px', background: '#0891b215', border: '1px solid #0891b240', borderRadius: 8, color: '#0891b2', fontSize: 12, textDecoration: 'none', fontWeight: 700 }}>
+            📂 書類ポータル
+          </a>
           <div style={{ fontSize: 12, color: C.muted }}>坂田昌鴻</div>
           <button onClick={() => setAuthed(false)} style={{ padding: '6px 14px', background: '#ef444415', border: '1px solid #ef444430', borderRadius: 8, color: '#ef4444', fontSize: 12, cursor: 'pointer' }}>
             ログアウト
@@ -153,12 +100,12 @@ export default function Home() {
           <p style={{ color: C.muted, fontSize: 13 }}>クリックするだけで各Portalに直接アクセスできます</p>
         </div>
 
-        {/* Stats */}
+        {/* Stats — lib/data.ts から自動計算 */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
           {[
-            { label: '総サービス数', value: '5', color: '#0891b2' },
-            { label: '稼働中', value: '2', color: '#10b981' },
-            { label: '総Portal数', value: '15', color: '#7c3aed' },
+            { label: '総サービス数', value: String(stats.services), color: '#0891b2' },
+            { label: '稼働中', value: String(stats.active), color: '#10b981' },
+            { label: '総Portal数', value: String(stats.portals), color: '#7c3aed' },
           ].map((s, i) => (
             <div key={i} style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 12, padding: '1.25rem', borderTop: `3px solid ${s.color}` }}>
               <div style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>{s.label}</div>
@@ -167,13 +114,13 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Portal Cards */}
+        {/* Portal Cards — lib/data.ts から自動生成 */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {portals.map(service => (
+          {PROJECTS.map(service => (
             <div key={service.id} style={{
               background: C.surface, border: `1px solid ${C.border}`,
               borderRadius: 14, overflow: 'hidden',
-              opacity: service.status === 'coming' ? 0.6 : 1,
+              opacity: service.done ? 1 : 0.6,
             }}>
               {/* Service Header */}
               <div style={{
@@ -182,44 +129,56 @@ export default function Home() {
                 background: `${service.color}10`,
               }}>
                 <span style={{ fontSize: 22 }}>{service.icon}</span>
-                <div style={{ fontSize: 16, fontWeight: 700 }}>{service.name}</div>
+                <div>
+                  <div style={{ fontSize: 16, fontWeight: 700 }}>{service.name}</div>
+                  {service.description && <div style={{ fontSize: 11, color: C.muted }}>{service.description}</div>}
+                </div>
+                {service.driveUrl && (
+                  <a href={service.driveUrl} target="_blank" rel="noopener noreferrer" style={{ marginLeft: 'auto', fontSize: 11, padding: '3px 10px', borderRadius: 12, fontWeight: 700, color: C.muted, border: `1px solid ${C.border}`, textDecoration: 'none' }}>
+                    📂 書類
+                  </a>
+                )}
                 <div style={{
-                  marginLeft: 'auto', fontSize: 11, padding: '3px 10px', borderRadius: 12, fontWeight: 700,
-                  background: service.status === 'active' ? '#10b98120' : '#8B949E20',
-                  color: service.status === 'active' ? '#10b981' : C.muted,
-                  border: `1px solid ${service.status === 'active' ? '#10b98140' : '#8B949E40'}`,
+                  marginLeft: service.driveUrl ? 0 : 'auto', fontSize: 11, padding: '3px 10px', borderRadius: 12, fontWeight: 700,
+                  background: service.done ? '#10b98120' : '#8B949E20',
+                  color: service.done ? '#10b981' : C.muted,
+                  border: `1px solid ${service.done ? '#10b98140' : '#8B949E40'}`,
                 }}>
-                  {service.status === 'active' ? '✅ 稼働中' : '🔧 開発中'}
+                  {service.done ? `✅ ${service.status}` : `🔧 ${service.status}`}
                 </div>
               </div>
 
               {/* Portal Links */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
-                {service.portals.map((portal, i) => (
-                  <div key={i} style={{ borderRight: i < 2 ? `1px solid ${C.border}` : 'none' }}>
-                    {service.status === 'active' && portal.url ? (
-                      <a href={portal.url} target="_blank" rel="noopener noreferrer" style={{
-                        display: 'flex', flexDirection: 'column', gap: 6, padding: '18px 20px',
-                        textDecoration: 'none', transition: 'background 0.15s',
-                      }}
-                        onMouseEnter={e => (e.currentTarget.style.background = `${service.color}15`)}
-                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                      >
-                        <span style={{ fontSize: 22 }}>{portal.icon}</span>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{portal.name}</span>
-                        <span style={{ fontSize: 11, color: C.muted }}>{portal.desc}</span>
-                        <span style={{ fontSize: 10, color: service.color, marginTop: 4 }}>→ 開く</span>
-                      </a>
-                    ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '18px 20px' }}>
-                        <span style={{ fontSize: 22 }}>{portal.icon}</span>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: C.muted }}>{portal.name}</span>
-                        <span style={{ fontSize: 11, color: C.muted }}>{portal.desc}</span>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+              {service.portals.length > 0 ? (
+                <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(service.portals.length, 3)}, 1fr)` }}>
+                  {service.portals.map((portal, i) => (
+                    <div key={i} style={{ borderRight: i < service.portals.length - 1 ? `1px solid ${C.border}` : 'none' }}>
+                      {service.done && portal.url ? (
+                        <a href={portal.url} target="_blank" rel="noopener noreferrer" style={{
+                          display: 'flex', flexDirection: 'column', gap: 6, padding: '18px 20px',
+                          textDecoration: 'none', transition: 'background 0.15s',
+                        }}
+                          onMouseEnter={e => (e.currentTarget.style.background = `${service.color}15`)}
+                          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                        >
+                          <span style={{ fontSize: 22 }}>{portal.icon}</span>
+                          <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{portal.name}</span>
+                          <span style={{ fontSize: 11, color: C.muted }}>{portal.desc}</span>
+                          <span style={{ fontSize: 10, color: service.color, marginTop: 4 }}>→ 開く</span>
+                        </a>
+                      ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '18px 20px' }}>
+                          <span style={{ fontSize: 22 }}>{portal.icon}</span>
+                          <span style={{ fontSize: 13, fontWeight: 700, color: C.muted }}>{portal.name}</span>
+                          <span style={{ fontSize: 11, color: C.muted }}>{portal.desc}</span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ padding: '18px 20px', fontSize: 12, color: C.muted }}>🔧 準備中 — 完成後、lib/data.ts に追加すると自動掲載されます</div>
+              )}
             </div>
           ))}
         </div>
