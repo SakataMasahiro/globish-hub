@@ -79,6 +79,8 @@ export const PROJECTS: Project[] = [
     driveUrl: 'https://drive.google.com/drive/folders/1FTSgneUTPadts1SQRKeCBrZxPHEtHrB9?usp=share_link',
     portals: [
       { name: 'Touch Portal', desc: '治療院向けダッシュボード', url: 'https://tascal-touch.vercel.app', icon: '✋' },
+      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://tascal-touch.vercel.app/super-admin', icon: '🔐' },
+      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://tascal-touch.vercel.app/partner', icon: '🤝' },
     ],
   },
   {
