@@ -89,11 +89,15 @@ export const PROJECTS: Project[] = [
     nameEn: 'Manabi',
     icon: '📚',
     color: '#f59e0b',
-    done: false,
-    status: '開発中',
+    done: true,
+    status: '完成済',
     description: '学習塾・習い事教室向けDXプラットフォーム — 成長の証人',
     driveUrl: '',
-    portals: [],
+    portals: [
+      { name: 'Manabi Portal', desc: '教室向けダッシュボード', url: 'https://www.tascal-manabi.com', icon: '📚' },
+      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://www.tascal-manabi.com/super-admin', icon: '🔐' },
+      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://www.tascal-manabi.com/partner', icon: '🤝' },
+    ],
   },
   {
     id: 'pet',
