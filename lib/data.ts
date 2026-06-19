@@ -97,6 +97,8 @@ export const PROJECTS: Project[] = [
       { name: 'Manabi Portal', desc: '教室向けダッシュボード', url: 'https://www.tascal-manabi.com', icon: '📚' },
       { name: 'Super Admin', desc: '管理者専用画面', url: 'https://www.tascal-manabi.com/super-admin', icon: '🔐' },
       { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://www.tascal-manabi.com/partner', icon: '🤝' },
+      { name: '営業パンフレット', desc: 'Tascal Manabi 紹介資料', url: 'https://www.tascal-manabi.com/tascal_manabi_pamphlet.pdf', icon: '📄' },
+      { name: 'ユーザーマニュアル', desc: '使用マニュアル', url: 'https://www.tascal-manabi.com/tascal_manabi_manual.pdf', icon: '📖' },
     ],
   },
   {
