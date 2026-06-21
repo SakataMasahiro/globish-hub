@@ -1,4 +1,4 @@
-export type ProjectId = 'dental' | 'beauty' | 'touch' | 'manabi' | 'pet';
+export type ProjectId = 'dental' | 'beauty' | 'touch' | 'manabi' | 'pet' | 'hoken';
 export type FileTag = 'security' | 'marketing' | 'legal' | 'general';
 export type FileType = 'DOCX' | 'PDF' | 'XLSX' | 'PNG' | 'OTHER';
 
@@ -102,16 +102,38 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
+    id: 'hoken',
+    name: 'Tascal Hoken',
+    nameEn: 'Hoken',
+    icon: '🛡️',
+    color: '#dc2626',
+    done: true,
+    status: '完成済',
+    description: '次世代生命保険営業支援プラットフォーム — AIの盾と剣',
+    driveUrl: '',
+    portals: [
+      { name: 'Hoken Portal', desc: '生保営業向けダッシュボード', url: 'https://tascal-hoken.vercel.app', icon: '🛡️' },
+      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://tascal-hoken.vercel.app/super-admin', icon: '🔐' },
+      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://tascal-hoken.vercel.app/partner', icon: '🤝' },
+      { name: '使い方マニュアル', desc: '現場・ソナエルジュ向け操作ガイド', url: 'https://tascal-hoken.vercel.app/Tascal_Hoken_%E4%BD%BF%E3%81%84%E6%96%B9%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB.pdf', icon: '📖' },
+      { name: '営業用パンフレット', desc: '経営層・参画企業向け紹介資料', url: 'https://tascal-hoken.vercel.app/Tascal_Hoken_%E5%96%B6%E6%A5%AD%E7%94%A8%E3%83%91%E3%83%B3%E3%83%95%E3%83%AC%E3%83%83%E3%83%88.pdf', icon: '📄' },
+    ],
+  },
+  {
     id: 'pet',
     name: 'Tascal Pet',
     nameEn: 'Pet',
     icon: '🐾',
-    color: '#10b981',
-    done: false,
-    status: '構築準備中',
-    description: 'ペット関連サービス向けDXプラットフォーム',
+    color: '#1D9E75',
+    done: true,
+    status: '完成済',
+    description: '動物病院向けDXプラットフォーム — ペットは家族。その命に寄り添う。',
     driveUrl: '',
-    portals: [],
+    portals: [
+      { name: 'Pet Portal', desc: '動物病院向けダッシュボード', url: 'https://tascal-pet.vercel.app', icon: '🐾' },
+      { name: 'Super Admin', desc: '管理者専用画面', url: 'https://tascal-pet.vercel.app/super-admin', icon: '🔐' },
+      { name: 'Partner Portal', desc: 'パートナー向け', url: 'https://tascal-pet.vercel.app/partner', icon: '🤝' },
+    ],
   },
 ];
 
@@ -141,4 +163,6 @@ export const INITIAL_FILES: PortalFile[] = [
   { id: 1, name: 'Tascal Dental ファイル一覧', project: 'dental', tag: 'general', date: '2026-05-18', type: 'OTHER', size: 'Google Drive', driveUrl: 'https://drive.google.com/drive/folders/1y6Z_tEKRB2MdAv_ysBswHuxCO5AuFxXv?usp=share_link' },
   { id: 2, name: 'Love Beauty ファイル一覧', project: 'beauty', tag: 'general', date: '2026-05-18', type: 'OTHER', size: 'Google Drive', driveUrl: 'https://drive.google.com/drive/folders/1LDtF2q9tZByp77GYUZ6WJiZBx5ptokB7?usp=share_link' },
   { id: 3, name: 'Tascal Touch ファイル一覧', project: 'touch', tag: 'general', date: '2026-05-18', type: 'OTHER', size: 'Google Drive', driveUrl: 'https://drive.google.com/drive/folders/1FTSgneUTPadts1SQRKeCBrZxPHEtHrB9?usp=share_link' },
+  { id: 4, name: 'Tascal_Hoken_使い方マニュアル.pdf', project: 'hoken', tag: 'general', date: '2026-06-20', type: 'PDF', size: '395KB', driveUrl: 'https://tascal-hoken.vercel.app/Tascal_Hoken_%E4%BD%BF%E3%81%84%E6%96%B9%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB.pdf' },
+  { id: 5, name: 'Tascal_Hoken_営業用パンフレット.pdf', project: 'hoken', tag: 'marketing', date: '2026-06-20', type: 'PDF', size: '430KB', driveUrl: 'https://tascal-hoken.vercel.app/Tascal_Hoken_%E5%96%B6%E6%A5%AD%E7%94%A8%E3%83%91%E3%83%B3%E3%83%95%E3%83%AC%E3%83%83%E3%83%88.pdf' },
 ];
