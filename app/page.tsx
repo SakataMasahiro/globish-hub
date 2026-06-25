@@ -85,6 +85,9 @@ export default function Home() {
           <a href="/portal" style={{ padding: '6px 14px', background: '#0891b215', border: '1px solid #0891b240', borderRadius: 8, color: '#0891b2', fontSize: 12, textDecoration: 'none', fontWeight: 700 }}>
             📂 書類ポータル
           </a>
+          <a href="/prospects/dental" style={{ padding: '6px 14px', background: '#0891b215', border: '1px solid #0891b240', borderRadius: 8, color: '#0891b2', fontSize: 12, textDecoration: 'none', fontWeight: 700 }}>
+            🦷 歯科プロスペクト
+          </a>
           <div style={{ fontSize: 12, color: C.muted }}>坂田昌鴻</div>
           <button onClick={() => setAuthed(false)} style={{ padding: '6px 14px', background: '#ef444415', border: '1px solid #ef444430', borderRadius: 8, color: '#ef4444', fontSize: 12, cursor: 'pointer' }}>
             ログアウト
