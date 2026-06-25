@@ -1,4 +1,4 @@
-export type ProjectId = 'dental' | 'beauty' | 'touch' | 'manabi' | 'pet' | 'hoken';
+export type ProjectId = 'dental' | 'beauty' | 'touch' | 'manabi' | 'pet' | 'hoken' | 'pro-malaysia';
 export type FileTag = 'security' | 'marketing' | 'legal' | 'general';
 export type FileType = 'DOCX' | 'PDF' | 'XLSX' | 'PNG' | 'OTHER';
 
@@ -120,6 +120,22 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
+    id: 'pro-malaysia',
+    name: 'Tascal Pro Malaysia',
+    nameEn: 'Pro Malaysia',
+    icon: '🇲🇾',
+    color: '#CC0001',
+    done: false,
+    status: '開発中',
+    description: 'マレーシア向けTascal Proプラットフォーム',
+    driveUrl: '',
+    portals: [
+      { name: 'Brochure v3', desc: '製品ブローシャー', url: '/docs/TascalPro_Brochure_v3.pdf', icon: '📄' },
+      { name: 'User Manual v1.2', desc: 'ユーザーマニュアル', url: '/docs/TascalPro_Malaysia_UserManual_v1.2.pdf', icon: '📖' },
+      { name: 'WTA Founding Partner Proposal v3', desc: 'WTA創設パートナー提案書', url: '/docs/WTA_FoundingPartner_Proposal_v3.pptx', icon: '🤝' },
+    ],
+  },
+  {
     id: 'pet',
     name: 'Tascal Pet',
     nameEn: 'Pet',
@@ -165,4 +181,7 @@ export const INITIAL_FILES: PortalFile[] = [
   { id: 3, name: 'Tascal Touch ファイル一覧', project: 'touch', tag: 'general', date: '2026-05-18', type: 'OTHER', size: 'Google Drive', driveUrl: 'https://drive.google.com/drive/folders/1FTSgneUTPadts1SQRKeCBrZxPHEtHrB9?usp=share_link' },
   { id: 4, name: 'Tascal_Hoken_使い方マニュアル.pdf', project: 'hoken', tag: 'general', date: '2026-06-20', type: 'PDF', size: '395KB', driveUrl: 'https://tascal-hoken.vercel.app/Tascal_Hoken_%E4%BD%BF%E3%81%84%E6%96%B9%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB.pdf' },
   { id: 5, name: 'Tascal_Hoken_営業用パンフレット.pdf', project: 'hoken', tag: 'marketing', date: '2026-06-20', type: 'PDF', size: '430KB', driveUrl: 'https://tascal-hoken.vercel.app/Tascal_Hoken_%E5%96%B6%E6%A5%AD%E7%94%A8%E3%83%91%E3%83%B3%E3%83%95%E3%83%AC%E3%83%83%E3%83%88.pdf' },
+  { id: 6, name: 'TascalPro_Brochure_v3.pdf', project: 'pro-malaysia', tag: 'marketing', date: '2026-06-25', type: 'PDF', size: '', driveUrl: '/docs/TascalPro_Brochure_v3.pdf' },
+  { id: 7, name: 'TascalPro_Malaysia_UserManual_v1.2.pdf', project: 'pro-malaysia', tag: 'general', date: '2026-06-25', type: 'PDF', size: '', driveUrl: '/docs/TascalPro_Malaysia_UserManual_v1.2.pdf' },
+  { id: 8, name: 'WTA_FoundingPartner_Proposal_v3.pptx', project: 'pro-malaysia', tag: 'marketing', date: '2026-06-25', type: 'OTHER', size: '', driveUrl: '/docs/WTA_FoundingPartner_Proposal_v3.pptx' },
 ];
