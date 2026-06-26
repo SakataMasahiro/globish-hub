@@ -1,195 +1,164 @@
 'use client';
 
-import { useState } from 'react';
-import { PROJECTS } from '@/lib/data';
+import Link from 'next/link';
 
-const C = {
-  bg: '#0D1117',
-  surface: '#161B22',
-  border: '#30363D',
-  text: '#F0F6FC',
-  muted: '#8B949E',
+const NAV = '#0A1628';
+const GOLD = '#C9A84C';
+const GOLD_LIGHT = '#E8C97A';
+const SURFACE = '#0F1E35';
+const BORDER = '#1E3251';
+const TEXT = '#F0F4FF';
+const MUTED = '#7A94BB';
+
+type ProspectItem = {
+  icon: string;
+  label: string;
+  href?: string;
+  active: boolean;
 };
 
+const PROSPECTS: ProspectItem[] = [
+  { icon: '🦷', label: '歯科プロスペクト', href: '/prospects/dental', active: true },
+  { icon: '💄', label: '美容プロスペクト', active: false },
+  { icon: '🖐️', label: 'Touchプロスペクト', active: false },
+  { icon: '📚', label: 'Manabiプロスペクト', active: false },
+  { icon: '🐾', label: 'Petプロスペクト', active: false },
+];
+
 export default function Home() {
-  const [pw, setPw] = useState('');
-  const [authed, setAuthed] = useState(false);
-  const [pwError, setPwError] = useState(false);
-
-  const stats = {
-    services: PROJECTS.length,
-    active: PROJECTS.filter(p => p.done).length,
-    portals: PROJECTS.reduce((n, p) => n + p.portals.length, 0),
-  };
-
-  function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    if (pw === 'Norikosan1947##') {
-      setAuthed(true);
-    } else {
-      setPwError(true);
-      setTimeout(() => setPwError(false), 2000);
-    }
-  }
-
-  if (!authed) return (
-    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Noto Sans JP', sans-serif" }}>
-      <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 16, padding: '3rem', width: 380, boxShadow: '0 25px 60px rgba(0,0,0,0.5)' }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{ fontSize: 48, marginBottom: 12 }}>🌐</div>
-          <div style={{ fontSize: 11, color: C.muted, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 6 }}>Globish International</div>
-          <div style={{ fontSize: 22, fontWeight: 700, color: C.text }}>Portal Hub</div>
-          <div style={{ fontSize: 12, color: C.muted, marginTop: 4 }}>坂田さん専用</div>
-        </div>
-        <form onSubmit={handleLogin}>
-          <input
-            type="password"
-            value={pw}
-            onChange={e => setPw(e.target.value)}
-            placeholder="パスワードを入力"
-            autoFocus
-            style={{
-              width: '100%', padding: '12px 16px', background: C.bg,
-              border: `1px solid ${pwError ? '#ef4444' : C.border}`,
-              borderRadius: 8, color: C.text, fontSize: 15, outline: 'none',
-              marginBottom: '1rem', boxSizing: 'border-box', fontFamily: 'inherit',
-            }}
-          />
-          {pwError && <p style={{ color: '#ef4444', fontSize: 12, marginBottom: '0.75rem' }}>パスワードが違います</p>}
-          <button type="submit" style={{
-            width: '100%', padding: '13px',
-            background: 'linear-gradient(135deg, #0891b2, #0e7490)',
-            border: 'none', borderRadius: 8, color: '#fff',
-            fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
-          }}>
-            ログイン →
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: "'Noto Sans JP', sans-serif", color: C.text }}>
+    <div style={{ minHeight: '100vh', background: NAV, fontFamily: "'Noto Sans JP', 'DM Sans', sans-serif", color: TEXT, display: 'flex', flexDirection: 'column' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Sans:wght@400;500;600&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .nav-link-active:hover { background: rgba(201,168,76,0.15) !important; }
+        .card-active:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(201,168,76,0.2) !important; }
+        .open-btn:hover { background: ${GOLD_LIGHT} !important; }
+      `}</style>
 
       {/* Header */}
-      <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: '0 2rem', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
+      <header style={{ background: SURFACE, borderBottom: `1px solid ${BORDER}`, height: 64, display: 'flex', alignItems: 'center', padding: '0 2rem', position: 'sticky', top: 0, zIndex: 100, flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ fontSize: 24 }}>🌐</span>
+          <div style={{ width: 36, height: 36, borderRadius: 8, background: `linear-gradient(135deg, ${GOLD}, #A87C2A)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>
+            🌐
+          </div>
           <div>
-            <div style={{ fontSize: 16, fontWeight: 700 }}>Globish Portal Hub</div>
-            <div style={{ fontSize: 10, color: '#0891b2', letterSpacing: '0.15em', textTransform: 'uppercase' }}>全サービス一元管理</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: GOLD, letterSpacing: '0.03em' }}>Globish Hub</div>
+            <div style={{ fontSize: 10, color: MUTED, letterSpacing: '0.18em', textTransform: 'uppercase' }}>Globish International</div>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <a href="/portal" style={{ padding: '6px 14px', background: '#0891b215', border: '1px solid #0891b240', borderRadius: 8, color: '#0891b2', fontSize: 12, textDecoration: 'none', fontWeight: 700 }}>
-            📂 書類ポータル
-          </a>
-          <a href="/prospects/dental" style={{ padding: '6px 14px', background: '#0891b215', border: '1px solid #0891b240', borderRadius: 8, color: '#0891b2', fontSize: 12, textDecoration: 'none', fontWeight: 700 }}>
-            🦷 歯科プロスペクト
-          </a>
-          <div style={{ fontSize: 12, color: C.muted }}>坂田昌鴻</div>
-          <button onClick={() => setAuthed(false)} style={{ padding: '6px 14px', background: '#ef444415', border: '1px solid #ef444430', borderRadius: 8, color: '#ef4444', fontSize: 12, cursor: 'pointer' }}>
-            ログアウト
-          </button>
-        </div>
-      </div>
+      </header>
 
-      {/* Main */}
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '2.5rem 2rem' }}>
-
-        <div style={{ marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>Portal 一覧</h1>
-          <p style={{ color: C.muted, fontSize: 13 }}>クリックするだけで各Portalに直接アクセスできます</p>
-        </div>
-
-        {/* Stats — lib/data.ts から自動計算 */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
-          {[
-            { label: '総サービス数', value: String(stats.services), color: '#0891b2' },
-            { label: '稼働中', value: String(stats.active), color: '#10b981' },
-            { label: '総Portal数', value: String(stats.portals), color: '#7c3aed' },
-          ].map((s, i) => (
-            <div key={i} style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 12, padding: '1.25rem', borderTop: `3px solid ${s.color}` }}>
-              <div style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>{s.label}</div>
-              <div style={{ fontSize: 32, fontWeight: 800, color: s.color }}>{s.value}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Portal Cards — lib/data.ts から自動生成 */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {PROJECTS.map(service => (
-            <div key={service.id} style={{
-              background: C.surface, border: `1px solid ${C.border}`,
-              borderRadius: 14, overflow: 'hidden',
-              opacity: service.done ? 1 : 0.6,
-            }}>
-              {/* Service Header */}
-              <div style={{
-                padding: '14px 20px', borderBottom: `1px solid ${C.border}`,
-                display: 'flex', alignItems: 'center', gap: 12,
-                background: `${service.color}10`,
-              }}>
-                <span style={{ fontSize: 22 }}>{service.icon}</span>
-                <div>
-                  <div style={{ fontSize: 16, fontWeight: 700 }}>{service.name}</div>
-                  {service.description && <div style={{ fontSize: 11, color: C.muted }}>{service.description}</div>}
-                </div>
-                {service.driveUrl && (
-                  <a href={service.driveUrl} target="_blank" rel="noopener noreferrer" style={{ marginLeft: 'auto', fontSize: 11, padding: '3px 10px', borderRadius: 12, fontWeight: 700, color: C.muted, border: `1px solid ${C.border}`, textDecoration: 'none' }}>
-                    📂 書類
-                  </a>
-                )}
-                <div style={{
-                  marginLeft: service.driveUrl ? 0 : 'auto', fontSize: 11, padding: '3px 10px', borderRadius: 12, fontWeight: 700,
-                  background: service.done ? '#10b98120' : '#8B949E20',
-                  color: service.done ? '#10b981' : C.muted,
-                  border: `1px solid ${service.done ? '#10b98140' : '#8B949E40'}`,
+      <div style={{ display: 'flex', flex: 1 }}>
+        {/* Sidebar */}
+        <aside style={{ width: 240, background: SURFACE, borderRight: `1px solid ${BORDER}`, padding: '28px 0', flexShrink: 0, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '0 20px 20px', borderBottom: `1px solid ${BORDER}`, marginBottom: 16 }}>
+            <div style={{ fontSize: 10, letterSpacing: '0.2em', color: MUTED, textTransform: 'uppercase', marginBottom: 8 }}>プロスペクト管理</div>
+          </div>
+          <nav style={{ padding: '0 12px', flex: 1 }}>
+            {PROSPECTS.map((item, i) => (
+              item.active && item.href ? (
+                <Link key={i} href={item.href} className="nav-link-active" style={{
+                  display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px',
+                  borderRadius: 8, textDecoration: 'none', marginBottom: 4,
+                  background: 'rgba(201,168,76,0.1)', border: `1px solid rgba(201,168,76,0.25)`,
+                  color: GOLD, fontSize: 13, fontWeight: 500, transition: 'background 0.15s',
                 }}>
-                  {service.done ? `✅ ${service.status}` : `🔧 ${service.status}`}
-                </div>
-              </div>
-
-              {/* Portal Links */}
-              {service.portals.length > 0 ? (
-                <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(service.portals.length, 3)}, 1fr)` }}>
-                  {service.portals.map((portal, i) => (
-                    <div key={i} style={{ borderRight: i < service.portals.length - 1 ? `1px solid ${C.border}` : 'none' }}>
-                      {service.done && portal.url ? (
-                        <a href={portal.url} target="_blank" rel="noopener noreferrer" style={{
-                          display: 'flex', flexDirection: 'column', gap: 6, padding: '18px 20px',
-                          textDecoration: 'none', transition: 'background 0.15s',
-                        }}
-                          onMouseEnter={e => (e.currentTarget.style.background = `${service.color}15`)}
-                          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                        >
-                          <span style={{ fontSize: 22 }}>{portal.icon}</span>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{portal.name}</span>
-                          <span style={{ fontSize: 11, color: C.muted }}>{portal.desc}</span>
-                          <span style={{ fontSize: 10, color: service.color, marginTop: 4 }}>→ 開く</span>
-                        </a>
-                      ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '18px 20px' }}>
-                          <span style={{ fontSize: 22 }}>{portal.icon}</span>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: C.muted }}>{portal.name}</span>
-                          <span style={{ fontSize: 11, color: C.muted }}>{portal.desc}</span>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                  <span style={{ fontSize: 17 }}>{item.icon}</span>
+                  <span style={{ flex: 1 }}>{item.label}</span>
+                  <span style={{ fontSize: 10, color: GOLD, fontWeight: 700 }}>→</span>
+                </Link>
               ) : (
-                <div style={{ padding: '18px 20px', fontSize: 12, color: C.muted }}>🔧 準備中 — 完成後、lib/data.ts に追加すると自動掲載されます</div>
-              )}
-            </div>
-          ))}
-        </div>
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px',
+                  borderRadius: 8, marginBottom: 4, opacity: 0.45,
+                  color: MUTED, fontSize: 13, cursor: 'default',
+                }}>
+                  <span style={{ fontSize: 17 }}>{item.icon}</span>
+                  <span style={{ flex: 1 }}>{item.label}</span>
+                  <span style={{ fontSize: 9, background: '#1E3251', color: MUTED, padding: '2px 6px', borderRadius: 10, letterSpacing: '0.05em' }}>Soon</span>
+                </div>
+              )
+            ))}
+          </nav>
+          <div style={{ padding: '16px 20px', borderTop: `1px solid ${BORDER}` }}>
+            <div style={{ fontSize: 11, color: MUTED }}>Globish International Co., Ltd.</div>
+            <div style={{ fontSize: 10, color: '#3A5070', marginTop: 3 }}>坂田昌鴻 — CEO</div>
+          </div>
+        </aside>
 
-        {/* Footer */}
-        <div style={{ textAlign: 'center', marginTop: '3rem', padding: '1.5rem 0', borderTop: `1px solid ${C.border}`, color: C.muted, fontSize: 12 }}>
-          Globish International Co., Ltd. — CEO: Masahiro Sakata — Kuala Lumpur, Malaysia
-        </div>
+        {/* Main */}
+        <main style={{ flex: 1, padding: '3rem', overflowY: 'auto' }}>
+          <div style={{ maxWidth: 860, margin: '0 auto' }}>
+
+            {/* Title */}
+            <div style={{ marginBottom: '3rem' }}>
+              <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: TEXT, marginBottom: 8 }}>
+                Globish International — 社内管理ツール
+              </h1>
+              <p style={{ color: MUTED, fontSize: 14 }}>プロスペクト管理・営業支援ツール一覧</p>
+            </div>
+
+            {/* Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
+              {PROSPECTS.map((item, i) => (
+                <div key={i} className={item.active ? 'card-active' : ''} style={{
+                  background: SURFACE,
+                  border: `1px solid ${item.active ? `rgba(201,168,76,0.4)` : BORDER}`,
+                  borderRadius: 14,
+                  padding: '1.5rem',
+                  opacity: item.active ? 1 : 0.5,
+                  transition: 'transform 0.18s, box-shadow 0.18s',
+                  boxShadow: item.active ? '0 4px 20px rgba(0,0,0,0.3)' : 'none',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{
+                      width: 48, height: 48, borderRadius: 10,
+                      background: item.active ? `rgba(201,168,76,0.15)` : '#1E3251',
+                      border: `1px solid ${item.active ? `rgba(201,168,76,0.3)` : BORDER}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24,
+                    }}>
+                      {item.icon}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 15, fontWeight: 600, color: item.active ? TEXT : MUTED }}>{item.label}</div>
+                      <div style={{ fontSize: 11, color: item.active ? GOLD : MUTED, marginTop: 2 }}>
+                        {item.active ? 'プロスペクト管理' : 'Coming Soon'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {item.active && item.href ? (
+                    <Link href={item.href} className="open-btn" style={{
+                      display: 'block', textAlign: 'center', padding: '9px',
+                      background: GOLD, color: '#0A1628',
+                      borderRadius: 8, fontSize: 13, fontWeight: 700,
+                      textDecoration: 'none', transition: 'background 0.15s',
+                      marginTop: 4,
+                    }}>
+                      開く →
+                    </Link>
+                  ) : (
+                    <div style={{
+                      textAlign: 'center', padding: '9px',
+                      background: '#1E3251', color: MUTED,
+                      borderRadius: 8, fontSize: 12, fontWeight: 500,
+                    }}>
+                      準備中
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginTop: '4rem', paddingTop: '1.5rem', borderTop: `1px solid ${BORDER}`, textAlign: 'center', color: MUTED, fontSize: 11 }}>
+              Globish International Co., Ltd. — Kuala Lumpur, Malaysia
+            </div>
+          </div>
+        </main>
       </div>
     </div>
   );
