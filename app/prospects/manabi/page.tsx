@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
 type Prospect = {
@@ -115,6 +116,15 @@ export default function ManabiProspectsPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-6xl mx-auto">
+        <Link href="/" style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          padding: '7px 14px', borderRadius: 8, marginBottom: 24,
+          background: '#0A1628', color: '#C9A84C',
+          border: '1px solid rgba(201,168,76,0.4)',
+          fontSize: 13, fontWeight: 600, textDecoration: 'none',
+        }}>
+          ← Globish Hub
+        </Link>
         <h1 className="text-2xl font-bold text-gray-800 mb-6">学習塾プロスペクト管理</h1>
 
         <div className="flex items-center gap-3 mb-6 flex-wrap">
