@@ -116,7 +116,7 @@ export default function ProspectsPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-6xl mx-auto">
-        <Link href="/" style={{
+        <Link href="https://tascal-life-compass.vercel.app/dashboard" style={{
           display: 'inline-flex', alignItems: 'center', gap: 6,
           padding: '7px 14px', borderRadius: 8, marginBottom: 24,
           background: '#0A1628', color: '#C9A84C',
