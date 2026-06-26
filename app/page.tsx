@@ -53,8 +53,18 @@ export default function Home() {
       <div style={{ display: 'flex', flex: 1 }}>
         {/* Sidebar */}
         <aside style={{ width: 240, background: SURFACE, borderRight: `1px solid ${BORDER}`, padding: '28px 0', flexShrink: 0, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '0 20px 20px', borderBottom: `1px solid ${BORDER}`, marginBottom: 16 }}>
-            <div style={{ fontSize: 10, letterSpacing: '0.2em', color: MUTED, textTransform: 'uppercase', marginBottom: 8 }}>プロスペクト管理</div>
+          <div style={{ padding: '0 12px 16px', borderBottom: `1px solid ${BORDER}`, marginBottom: 16 }}>
+            <Link href="/" className="nav-link-active" style={{
+              display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px',
+              borderRadius: 8, textDecoration: 'none',
+              color: TEXT, fontSize: 13, fontWeight: 500, transition: 'background 0.15s',
+            }}>
+              <span style={{ fontSize: 17 }}>🏠</span>
+              <span>ホーム</span>
+            </Link>
+          </div>
+          <div style={{ padding: '0 20px 12px', marginBottom: 8 }}>
+            <div style={{ fontSize: 10, letterSpacing: '0.2em', color: MUTED, textTransform: 'uppercase' }}>プロスペクト管理</div>
           </div>
           <nav style={{ padding: '0 12px', flex: 1 }}>
             {PROSPECTS.map((item, i) => (

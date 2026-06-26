@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type Prospect = {
   id: string;
@@ -24,12 +24,17 @@ const STATUS_LABEL: Record<string, string> = {
   replied: "replied",
 };
 
+const PREFECTURES = ["北海道", "宮城県", "東京都", "神奈川県", "埼玉県", "千葉県", "愛知県", "大阪府", "兵庫県", "京都府", "広島県", "福岡県", "沖縄県"];
+
 export default function HokenProspectsPage() {
   const [prospects, setProspects] = useState<Prospect[]>([]);
   const [loading, setLoading] = useState(true);
   const [collecting, setCollecting] = useState(false);
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState("");
+  const [selectedPrefs, setSelectedPrefs] = useState<string[]>(["大阪府"]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const fetchProspects = () => {
     setLoading(true);
@@ -46,13 +51,32 @@ export default function HokenProspectsPage() {
     fetchProspects();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const togglePref = (pref: string) => {
+    setSelectedPrefs((prev) =>
+      prev.includes(pref) ? prev.filter((p) => p !== pref) : [...prev, pref]
+    );
+  };
+
   const handleCollect = async () => {
+    if (selectedPrefs.length === 0) {
+      setMessage("都道府県を1つ以上選択してください");
+      return;
+    }
     setCollecting(true);
     setMessage("");
     try {
-      const prefectures = ["大阪府", "兵庫県"];
       let totalCollected = 0;
-      for (const prefecture of prefectures) {
+      for (const prefecture of selectedPrefs) {
         const res = await fetch("/api/agent/hoken/collect", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -93,7 +117,38 @@ export default function HokenProspectsPage() {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">保険代理店プロスペクト管理</h1>
 
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center gap-3 mb-6 flex-wrap">
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2"
+            >
+              <span>
+                {selectedPrefs.length === 0
+                  ? "都道府県を選択"
+                  : selectedPrefs.length === 1
+                  ? selectedPrefs[0]
+                  : `${selectedPrefs.length}件選択中`}
+              </span>
+              <span className="text-xs text-gray-400">{showDropdown ? "▲" : "▼"}</span>
+            </button>
+            {showDropdown && (
+              <div className="absolute top-full left-0 z-20 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-2 w-40">
+                {PREFECTURES.map((pref) => (
+                  <label key={pref} className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-50 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedPrefs.includes(pref)}
+                      onChange={() => togglePref(pref)}
+                      className="accent-indigo-600"
+                    />
+                    <span className="text-sm text-gray-700">{pref}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+
           <button
             onClick={handleCollect}
             disabled={collecting}
