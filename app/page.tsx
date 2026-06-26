@@ -19,10 +19,11 @@ type ProspectItem = {
 
 const PROSPECTS: ProspectItem[] = [
   { icon: '🦷', label: '歯科プロスペクト', href: '/prospects/dental', active: true },
-  { icon: '💄', label: '美容プロスペクト', active: false },
-  { icon: '🖐️', label: 'Touchプロスペクト', active: false },
-  { icon: '📚', label: 'Manabiプロスペクト', active: false },
-  { icon: '🐾', label: 'Petプロスペクト', active: false },
+  { icon: '💄', label: '美容プロスペクト', href: '/prospects/beauty', active: true },
+  { icon: '🖐️', label: 'Touchプロスペクト', href: '/prospects/touch', active: true },
+  { icon: '📚', label: 'Manabiプロスペクト', href: '/prospects/manabi', active: true },
+  { icon: '🛡️', label: 'Hokenプロスペクト', href: '/prospects/hoken', active: true },
+  { icon: '🐾', label: 'Petプロスペクト', href: '/prospects/pet', active: true },
 ];
 
 export default function Home() {
